@@ -65,8 +65,9 @@ public class OrderService {
         return new GenericResponse("Order Created Successfully", true, order);
     }
 
-    @KafkaListener(topics="shipping-topic")
+    @KafkaListener(topics="shipping_topic", groupId="group_id")
     public void setOrderAsShipped(String json){
+        System.out.println(json);
         ShippedMessageResponse shippedMessageResponse = new Gson().fromJson(json, ShippedMessageResponse.class);
         var order = orderRepository.findById(shippedMessageResponse.data.orderId);
         order.ifPresent(value -> {
