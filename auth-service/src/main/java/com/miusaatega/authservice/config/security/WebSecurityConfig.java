@@ -1,5 +1,6 @@
 package com.miusaatega.authservice.config.security;
 
+import com.miusaatega.authservice.config.security.jwt.JwtRequestFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -20,8 +21,9 @@ import static java.lang.String.format;
 class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private UserDetailsService myUserDetailsService;
-//    @Autowired
-//    private JwtRequestFilter jwtRequestFilter;
+    @Autowired
+    private JwtRequestFilter jwtRequestFilter;
+
     @Value("${springdoc.api-docs.path}")
     private String restApiDocPath;
     @Value("${springdoc.swagger-ui.path}")
@@ -55,11 +57,10 @@ class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 //endpoints
 //                .antMatchers("/login").permitAll()
                 .antMatchers("/api/auth/**").permitAll()
-                .antMatchers("/api/affiliate/auth/**").hasAnyAuthority("AFFILIATE")
                 .anyRequest().authenticated().and()
                 .exceptionHandling().and().sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-//        httpSecurity.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
+        httpSecurity.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
 
     }
 }

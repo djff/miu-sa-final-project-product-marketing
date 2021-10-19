@@ -43,6 +43,7 @@ public class UserService implements UserDetailsService {
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
         User user = null;
         try {
+            System.out.println("username: " + s);
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);
             headers.set("TOKEN", accountServiceToken);
@@ -50,7 +51,7 @@ public class UserService implements UserDetailsService {
                 + "/api/account/affiliate/login/{email}",  HttpMethod.GET, new HttpEntity<>(headers), String.class, s)
                     .getBody();
             JsonNode root = objectMapper.readTree(responseStr);
-            user = new User(root.path("email").asText(), root.path("password").asText(), new ArrayList<>() {
+            user = new User(root.path("data").path("email").asText(), root.path("data").path("password").asText(), new ArrayList<>() {
                 {
                     add(new SimpleGrantedAuthority("USER"));
                 }
@@ -59,6 +60,7 @@ public class UserService implements UserDetailsService {
             e.printStackTrace();
             System.out.println("error: " + e.getMessage());
         }
+        System.out.println("username2: " + s);
         return user;
     }
 }

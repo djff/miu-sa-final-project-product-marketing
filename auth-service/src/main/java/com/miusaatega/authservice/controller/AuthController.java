@@ -17,7 +17,7 @@ import java.util.HashMap;
 
 @RestController
 @RequestMapping("api/auth")
-@Tag(name = "Authentication")
+//@Tag(name = "Authentication")
 class AuthController {
 
     @Autowired
@@ -32,6 +32,8 @@ class AuthController {
     @PostMapping("/login")
     public ResponseEntity<?> createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest) throws Exception {
 
+        System.out.println(authenticationRequest);
+
         try {
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(authenticationRequest.getUsername(), authenticationRequest.getPassword())
@@ -41,7 +43,6 @@ class AuthController {
             throw new Exception("Incorrect username or password", e);
         }
 
-        System.out.println(authenticationRequest);
 
         final UserDetails userDetails = userDetailsService
                 .loadUserByUsername(authenticationRequest.getUsername());
@@ -49,24 +50,6 @@ class AuthController {
         final String token = jwtTokenUtil.generateToken(userDetails);
 
         return ResponseEntity.ok(new AuthenticationResponse(token));
-    }
-
-    @PostMapping("/verify")
-    public ResponseEntity<?> verifyAuthenticationToken(@RequestBody() AuthenticationResponse authResponse) {
-        String token = authResponse.getToken();
-        System.out.println("token: " + token);
-        String username;
-        try {
-            username = jwtTokenUtil.extractUsername(token);
-            System.out.println("Username: " + username);
-        }
-        catch (Exception e) {
-            return ResponseEntity.badRequest().body("Invalid Token");
-        }
-
-        return ResponseEntity.ok(new HashMap<String, String>(){{
-            put("id", username);
-        }});
     }
 }
 
