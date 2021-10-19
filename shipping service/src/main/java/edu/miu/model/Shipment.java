@@ -17,6 +17,13 @@ public class Shipment {
     public Shipment() {
     }
 
+    public Shipment(UUID orderId, String trackingNumber, String status) {
+        this.orderId = orderId;
+        this.trackingNumber = trackingNumber;
+        this.status = status;
+
+    }
+
     public void setOrderId(UUID orderId) {
         this.orderId = orderId;
     }
