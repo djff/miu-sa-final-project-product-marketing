@@ -100,11 +100,11 @@ public class PaymentDTO {
     {
         switch(request.getType()){
             case BANK:
-                if(request.getAccountNo() == "" || request.getAccountName() == "" || request.getRoutingNo() == ""){
+                if(request.getAccountNo().trim().isEmpty() || request.getAccountName().trim().isEmpty() || request.getRoutingNo().trim().isEmpty()){
                     return false;
                 }
             case CARD:
-                if(request.getCardNumber() == "" || request.getNameOnCard() == "" || request.getExpDate() == ""){
+                if(request.getCardNumber().trim().isEmpty() || request.getNameOnCard().trim().isEmpty()|| request.getExpDate().trim().isEmpty()){
                     return false;
                 }
         }
