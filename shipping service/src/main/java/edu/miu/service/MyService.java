@@ -43,8 +43,5 @@ public class MyService {
         return responseFormat;
     }
 
-    getdata(){
-        return shipmentRepository.save(shipment);
-    }
 
 }
