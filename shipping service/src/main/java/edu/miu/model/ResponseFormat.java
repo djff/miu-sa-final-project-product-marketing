@@ -8,6 +8,12 @@ public class ResponseFormat {
     public ResponseFormat() {
     }
 
+    public ResponseFormat(String message, Boolean status, Object data) {
+        this.message = message;
+        this.status = status;
+        this.data = data;
+    }
+
 
     public void setMessage(String message) {
         this.message = message;
