@@ -1,5 +1,6 @@
 package com.miu.sa.orderservice.services;
 
+import com.google.gson.Gson;
 import com.miu.sa.orderservice.dto.kafka.*;
 import com.miu.sa.orderservice.dto.response.GenericResponse;
 import com.miu.sa.orderservice.dto.response.ShippedMessageResponse;
@@ -15,21 +16,24 @@ import java.util.stream.Collectors;
 @Service
 public class OrderService {
     final private OrderRepository orderRepository;
-    final private KafkaTemplate<String, OrderProductMessage> kafkaOrderTemplate;
-    final private KafkaTemplate<String, NotifyMessage> kafkaNotifyTemplate;
-    final private KafkaTemplate<String, ProductMessage> kafkaProductTemplate;
-    final private KafkaTemplate<String, OrderProductMessage> kafkaAffiliateTemplate;
+    final private KafkaTemplate<String, String> kafkaTemplateTest;
+    final private KafkaTemplate<String, String> kafkaOrderTemplate;
+    final private KafkaTemplate<String, String> kafkaNotifyTemplate;
+    final private KafkaTemplate<String, String> kafkaProductTemplate;
+    final private KafkaTemplate<String, String> kafkaAffiliateTemplate;
     private final String ORDER_TOPIC = "order-topic";
     private final String AFFILIATE_TOPIC = "affiliate-topic";
     private final String NOTIFICATION_TOPIC = "notification-topic";
     private final String PRODUCT_TOPIC = "product-topic";
 
     public OrderService(OrderRepository orderRepository,
-                        KafkaTemplate<String, OrderProductMessage> kafkaOrderTemplate,
-                        KafkaTemplate<String, NotifyMessage> kafkaNotifyTemplate,
-                        KafkaTemplate<String, ProductMessage> kafkaProductTemplate,
-                        KafkaTemplate<String, OrderProductMessage> kafkaAffiliateTemplate) {
+                        KafkaTemplate<String, String> kafkaTemplateTest,
+                        KafkaTemplate<String, String> kafkaOrderTemplate,
+                        KafkaTemplate<String, String> kafkaNotifyTemplate,
+                        KafkaTemplate<String, String> kafkaProductTemplate,
+                        KafkaTemplate<String, String> kafkaAffiliateTemplate) {
         this.orderRepository = orderRepository;
+        this.kafkaTemplateTest = kafkaTemplateTest;
         this.kafkaOrderTemplate = kafkaOrderTemplate;
         this.kafkaNotifyTemplate = kafkaNotifyTemplate;
         this.kafkaProductTemplate = kafkaProductTemplate;
@@ -55,12 +59,15 @@ public class OrderService {
         productMessage.isDeductable = true;
         productMessage.productList = order.getProductList();
 
-        kafkaProductTemplate.send(PRODUCT_TOPIC, productMessage);
+
+        kafkaTemplateTest.send("test", new Gson().toJson(productMessage));
+        kafkaProductTemplate.send(PRODUCT_TOPIC, new Gson().toJson(productMessage));
         return new GenericResponse("Order Created Successfully", true, order);
     }
 
-    @KafkaListener(topics="shipping-topic", groupId = "")
-    public void setOrderAsShipped(ShippedMessageResponse shippedMessageResponse){
+    @KafkaListener(topics="shipping-topic")
+    public void setOrderAsShipped(String json){
+        ShippedMessageResponse shippedMessageResponse = new Gson().fromJson(json, ShippedMessageResponse.class);
         var order = orderRepository.findById(shippedMessageResponse.data.orderId);
         order.ifPresent(value -> {
             value.setIsPaid(true);
@@ -72,8 +79,14 @@ public class OrderService {
         });
     }
 
-    @KafkaListener(topics = "payment-topic")
-    public void setOrderAsPaid(PaymentMessage paymentMessage){
+    @KafkaListener(topics="test", groupId = "group_id")
+    public void testOrderKafka(String testString){
+        System.out.println("The kafka is working well." + testString);
+    }
+
+    @KafkaListener(topics = "payment-response-topic", groupId = "group_id")
+    public void setOrderAsPaid(String json){
+        PaymentMessage paymentMessage = new Gson().fromJson(json, PaymentMessage.class);
         var order = orderRepository.findById(paymentMessage.paymentResponse.orderNumber).get();
 
         var message = "Dear " + order.getCustomerBillingInfo().getFname() + ", here is an update to your order" +
@@ -87,7 +100,7 @@ public class OrderService {
         if(paymentMessage.successful){
             // set products for shipment service
             orderProduct.productList = order.getProductList();
-            kafkaOrderTemplate.send(ORDER_TOPIC, orderProduct);
+            kafkaOrderTemplate.send(ORDER_TOPIC, new Gson().toJson(orderProduct));
 
             // set products for affiliate
             orderProduct.productList =
@@ -95,7 +108,7 @@ public class OrderService {
                             .stream()
                             .filter(p -> p.getAffiliateId() != null)
                             .collect(Collectors.toList());
-            kafkaAffiliateTemplate.send(AFFILIATE_TOPIC, orderProduct);
+            kafkaAffiliateTemplate.send(AFFILIATE_TOPIC, new Gson().toJson(orderProduct));
 
         }
     }
@@ -108,7 +121,6 @@ public class OrderService {
         notifyMessage.email = order.getCustomerBillingInfo().getEmail();
 
         // send message for notify service
-        kafkaNotifyTemplate.send(NOTIFICATION_TOPIC, notifyMessage);
+        kafkaNotifyTemplate.send(NOTIFICATION_TOPIC, new Gson().toJson(notifyMessage));
     }
-
 }
