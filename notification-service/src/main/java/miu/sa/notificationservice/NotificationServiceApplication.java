@@ -18,4 +18,5 @@ public class NotificationServiceApplication {
     RestTemplate restTemplate() {
         return new RestTemplate();
     }
+
 }
