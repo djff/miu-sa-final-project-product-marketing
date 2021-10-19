@@ -27,6 +27,7 @@ public class KafkaConsumer {
         UUID orderId = (UUID) response.get("orderId");
         if(isPaid) {
             ResponseFormat responseShipped = myService.processResponse(orderId);
+            kafkaProducer.writeMessage(gson.toJson(responseShipped.getData()));
         }
 
         System.out.println(response.get("isPaid"));
