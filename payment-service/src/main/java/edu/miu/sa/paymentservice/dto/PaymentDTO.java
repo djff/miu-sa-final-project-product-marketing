@@ -95,5 +95,20 @@ public class PaymentDTO {
     public void setAccountName(String accountName) {
         this.accountName = accountName;
     }
+
+    public Boolean IsValid(PaymentDTO request)
+    {
+        switch(request.getType()){
+            case BANK:
+                if(request.getAccountNo() == "" || request.getAccountName() == "" || request.getRoutingNo() == ""){
+                    return false;
+                }
+            case CARD:
+                if(request.getCardNumber() == "" || request.getNameOnCard() == "" || request.getExpDate() == ""){
+                    return false;
+                }
+        }
+        return true;
+    }
 }
 

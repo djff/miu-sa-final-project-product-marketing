@@ -5,6 +5,7 @@ import edu.miu.sa.paymentservice.dto.BasicResponse;
 import edu.miu.sa.paymentservice.dto.Card;
 import edu.miu.sa.paymentservice.dto.*;
 import edu.miu.sa.paymentservice.model.PaymentStatus;
+import edu.miu.sa.paymentservice.model.PaymentType;
 import edu.miu.sa.paymentservice.processor.BankService;
 import edu.miu.sa.paymentservice.processor.CardService;
 import edu.miu.sa.paymentservice.repository.TransactionPersistor;
@@ -29,33 +30,40 @@ public class TransactionService {
     private Util utils;
 
     public BasicResponse makePayment(PaymentDTO request){
-        BasicResponse response = new BasicResponse(true);
+        BasicResponse response = new BasicResponse(false);
+        if(!request.IsValid(request)){
+            response.setResponseCode("99");
+            response.setResponseDescription("Parameters for payment type not valid");
+            response.setPaymentResponse(new PaymentResponse(request.getOrderNumber(), "Incomplete payment parameters"));
+            return response;
+        }
+
         var payReference = utils.GenerateReference();
         transactionPersistor.addTransaction(request, payReference);
 
         var cardRequest = new Card();
         var bankRequest = new Bank();
 
-//        switch(request.getType()){
-//            case CARD:
-//                cardRequest.setCardNumber(request.getCardNumber());
-//                cardRequest.setNameOnCard(request.getNameOnCard());
-//                cardRequest.setExpDate(request.getExpDate());
-//                cardRequest.setAmount(request.getAmount());
-//                System.out.println(request.getAmount());
-//                response = cardService.payByCard(cardRequest);
-//                System.out.println(response.getSuccessful());
-//                break;
-//            case BANK:
-//                bankRequest.setAccountNo(request.getAccountNo());
-//                bankRequest.setRoutingNo(request.getRoutingNo());
-//                bankRequest.setAccountName(request.getAccountName());
-//                bankRequest.setAmount(request.getAmount());
-//                response = bankService.payByBank(bankRequest);
-//                break;
-//            default:
-//                break;
-//        }
+        switch(request.getType()){
+            case CARD:
+                cardRequest.setCardNumber(request.getCardNumber());
+                cardRequest.setNameOnCard(request.getNameOnCard());
+                cardRequest.setExpDate(request.getExpDate());
+                cardRequest.setAmount(request.getAmount());
+                System.out.println(request.getAmount());
+                response = cardService.payByCard(cardRequest);
+                System.out.println(response.getSuccessful());
+                break;
+            case BANK:
+                bankRequest.setAccountNo(request.getAccountNo());
+                bankRequest.setRoutingNo(request.getRoutingNo());
+                bankRequest.setAccountName(request.getAccountName());
+                bankRequest.setAmount(request.getAmount());
+                response = bankService.payByBank(bankRequest);
+                break;
+            default:
+                break;
+        }
 
         //TODO: update payment with response from transaction services
         var transactionDetails = transactionPersistor.findTransaction(payReference);

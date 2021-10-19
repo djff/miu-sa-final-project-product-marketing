@@ -25,8 +25,6 @@ public class Transaction {
     public LocalDateTime responseTime;
     public LocalDateTime dateCreated;
 
-
-
     public Transaction() {
     }
 
