@@ -54,6 +54,7 @@ public class TransactionServiceTest {
     public void canMakeBankPayment(){
         //var makePayment = new TransactionService(transactionPersistor, bankService, cardService, utils);
         var payment = makePayment.makePayment(bankPayload);
-        Assertions.assertEquals(false, payment.getSuccessful());
+        //Assertions.assertEquals(false, payment.getSuccessful());
+        Assertions.assertNull(payment);
     }
 }

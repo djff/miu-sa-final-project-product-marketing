@@ -22,7 +22,7 @@ import org.springframework.web.client.RestTemplate;
 public class BankService {
     @Value("${PAYMENT.BANK:http://BANK-SERVICE}")
     String baseUrl;
-    //@Value("${services.token}")
+    @Value("${services.token}")
     private String accountServiceToken;
 
     private final String path = "/api/bank/pay";

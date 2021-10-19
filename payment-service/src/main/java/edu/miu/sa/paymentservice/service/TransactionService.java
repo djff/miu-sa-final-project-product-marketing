@@ -29,33 +29,33 @@ public class TransactionService {
     private Util utils;
 
     public BasicResponse makePayment(PaymentDTO request){
-        BasicResponse response = new BasicResponse(false);
+        BasicResponse response = new BasicResponse(true);
         var payReference = utils.GenerateReference();
         transactionPersistor.addTransaction(request, payReference);
 
         var cardRequest = new Card();
         var bankRequest = new Bank();
 
-        switch(request.getType()){
-            case CARD:
-                cardRequest.setCardNumber(request.getCardNumber());
-                cardRequest.setNameOnCard(request.getNameOnCard());
-                cardRequest.setExpDate(request.getExpDate());
-                cardRequest.setAmount(request.getAmount());
-                System.out.println(request.getAmount());
-                response = cardService.payByCard(cardRequest);
-                System.out.println(response.getSuccessful());
-                break;
-            case BANK:
-                bankRequest.setAccountNo(request.getAccountNo());
-                bankRequest.setRoutingNo(request.getRoutingNo());
-                bankRequest.setAccountName(request.getAccountName());
-                bankRequest.setAmount(request.getAmount());
-                response = bankService.payByBank(bankRequest);
-                break;
-            default:
-                break;
-        }
+//        switch(request.getType()){
+//            case CARD:
+//                cardRequest.setCardNumber(request.getCardNumber());
+//                cardRequest.setNameOnCard(request.getNameOnCard());
+//                cardRequest.setExpDate(request.getExpDate());
+//                cardRequest.setAmount(request.getAmount());
+//                System.out.println(request.getAmount());
+//                response = cardService.payByCard(cardRequest);
+//                System.out.println(response.getSuccessful());
+//                break;
+//            case BANK:
+//                bankRequest.setAccountNo(request.getAccountNo());
+//                bankRequest.setRoutingNo(request.getRoutingNo());
+//                bankRequest.setAccountName(request.getAccountName());
+//                bankRequest.setAmount(request.getAmount());
+//                response = bankService.payByBank(bankRequest);
+//                break;
+//            default:
+//                break;
+//        }
 
         //TODO: update payment with response from transaction services
         var transactionDetails = transactionPersistor.findTransaction(payReference);
@@ -63,7 +63,7 @@ public class TransactionService {
             transactionDetails.responseCode = response.getResponseCode();
             transactionDetails.responseTime = LocalDateTime.now();
             transactionDetails.status = PaymentStatus.FAILED;
-            transactionPersistor.updateTransaction(transactionDetails);
+            transactionPersistor.updateTransaction(transactionDetails, response.getSuccessful());
 
             response.setResponseCode("99");
             response.setResponseDescription("Payment NOT successful");
@@ -74,7 +74,7 @@ public class TransactionService {
         transactionDetails.responseCode = response.getResponseCode();
         transactionDetails.responseTime = LocalDateTime.now();
         transactionDetails.status = PaymentStatus.SUCCESSFUL;
-        transactionPersistor.updateTransaction(transactionDetails);
+        transactionPersistor.updateTransaction(transactionDetails, response.getSuccessful());
 
         response.setSuccessful(true);
         response.setResponseCode("00");

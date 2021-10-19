@@ -8,17 +8,15 @@ import org.springframework.data.mongodb.core.mapping.Document;
 //import javax.persistence.*;
 import java.time.LocalDateTime;
 
+@Data
 @AllArgsConstructor
 @Document(collection = "transactions")
 public class Transaction {
-    //private Long id;
+    @Id
+    public String id;
     public Long customerReference;
     public String paymentReference;
     public String orderNumber;
-
-    public Transaction() {
-    }
-
     public Double amount;
     public PaymentType type;
     public PaymentStatus status;
@@ -26,6 +24,11 @@ public class Transaction {
     public String responseCode;
     public LocalDateTime responseTime;
     public LocalDateTime dateCreated;
+
+
+
+    public Transaction() {
+    }
 
 //    public Long getId() {
 //        return id;

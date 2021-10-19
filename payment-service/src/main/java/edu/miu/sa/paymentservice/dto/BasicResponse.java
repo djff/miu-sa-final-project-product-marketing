@@ -6,6 +6,16 @@ public class BasicResponse {
     private String responseDescription;
     private PaymentResponse paymentResponse;
 
+    @Override
+    public String toString() {
+        return "BasicResponse{" +
+                "successful=" + successful +
+                ", responseCode='" + responseCode + '\'' +
+                ", responseDescription='" + responseDescription + '\'' +
+                ", paymentResponse=" + paymentResponse +
+                '}';
+    }
+
     public PaymentResponse getPaymentResponse() {
         return paymentResponse;
     }

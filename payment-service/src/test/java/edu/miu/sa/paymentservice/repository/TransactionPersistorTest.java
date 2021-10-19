@@ -13,6 +13,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -29,10 +30,10 @@ public class TransactionPersistorTest {
     @Test
     void addTransaction() {
         saveTransaction = new TransactionPersistor(transactionRepository);
-        trans = new Transaction(123L, "334536626", "3536267w", 200.00, PaymentType.CARD,
-                PaymentStatus.PENDING, LocalDateTime.now(),"00", LocalDateTime.now(), LocalDateTime.now());
-        var actual = transactionRepository.insert(trans);
-        Assertions.assertNull(actual);
+//        trans = new Transaction(UUID.randomUUID(), "334536626", "3536267w", 200.00, PaymentType.CARD,
+//                PaymentStatus.PENDING, LocalDateTime.now(),"00", LocalDateTime.now(), LocalDateTime.now());
+//        var actual = transactionRepository.insert(trans);
+//        Assertions.assertNull(actual);
     }
 
     @Test

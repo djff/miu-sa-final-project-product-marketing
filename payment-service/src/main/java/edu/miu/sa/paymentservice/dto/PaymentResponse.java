@@ -7,6 +7,14 @@ public class PaymentResponse {
     private String orderNumber;
     private String PaymentReference;
 
+    @Override
+    public String toString() {
+        return "PaymentResponse{" +
+                "orderNumber='" + orderNumber + '\'' +
+                ", PaymentReference='" + PaymentReference + '\'' +
+                '}';
+    }
+
     public String getOrderNumber() {
         return orderNumber;
     }

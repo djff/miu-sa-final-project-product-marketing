@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Service
 @AllArgsConstructor
@@ -20,6 +21,7 @@ public class TransactionPersistor {
     public BasicResponse addTransaction(PaymentDTO request, String paymentReference){
         BasicResponse response = new BasicResponse(false);
         Transaction trans = new Transaction();
+        //trans.id = UUID.randomUUID();
         trans.customerReference = request.getCustomerReference();
         trans.paymentReference = paymentReference;
         trans.orderNumber = request.getOrderNumber();
@@ -38,11 +40,11 @@ public class TransactionPersistor {
         return response;
     }
 
-    public BasicResponse updateTransaction(Transaction transaction){
+    public BasicResponse updateTransaction(Transaction transaction, boolean status){
         BasicResponse response = new BasicResponse(false);
-        var trans = transactionRepository.findById(1L);
+        var trans = transactionRepository.findByPaymentReference(transaction.paymentReference);
 
-        if(trans == null){
+        if(trans != null && !status){
             transaction.responseTime = LocalDateTime.now();
             transaction.responseCode = "400";
             transactionRepository.save(transaction);

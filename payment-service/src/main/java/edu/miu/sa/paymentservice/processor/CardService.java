@@ -21,7 +21,7 @@ import org.springframework.web.client.RestTemplate;
 public class CardService {
     @Value("${PAYMENT.CARD:http://BANK-SERVICE}")
     String baseUrl;
-    //@Value("${services.token}")
+    @Value("${services.token}")
     private String accountServiceToken;
 
     private final String path = "/api/card/pay";
