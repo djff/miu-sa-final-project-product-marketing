@@ -24,7 +24,7 @@ public class MyController {
 
     }
 
-    @PostMapping("produce")
+    @PostMapping("/produce")
     public ResponseEntity<Void> produce(@RequestBody ResponseFormat s){
         this.kafkaProducer.writeMessage(s);
         return ResponseEntity.ok().build();
