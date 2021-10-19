@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("api/affiliate")
+@RequestMapping("api/affiliate/account")
 public class AffiliateController {
 
     private final AffiliateService service;
