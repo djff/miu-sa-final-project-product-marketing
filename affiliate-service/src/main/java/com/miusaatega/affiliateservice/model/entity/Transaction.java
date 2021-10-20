@@ -18,6 +18,7 @@ import java.util.List;
 public class Transaction implements Serializable {
     @Id
     private String id;
+    private String transRef;
     private Double amount;
     private List<Product> products;
     private LocalDateTime transDate;

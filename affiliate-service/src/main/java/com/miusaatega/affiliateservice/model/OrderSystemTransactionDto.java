@@ -10,11 +10,10 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class TransactionDto {
-    private String id;
-    private String transRef;
+public class OrderSystemTransactionDto {
+    private String orderId;
     private Double amount;
-    private List<Product> products;
-    private LocalDateTime transDate;
+    private List<Product> productList;
+    private LocalDateTime dateCreated;
     private String paymentStatus;
 }
