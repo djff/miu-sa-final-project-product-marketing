@@ -15,6 +15,7 @@
 	<description>Software architecture final project (Product Marketing)</description>
 	<properties>
 		<java.version>11</java.version>
+		<spring-cloud.version>2020.0.4</spring-cloud.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -24,6 +25,10 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.kafka</groupId>
@@ -60,7 +65,34 @@
 			<artifactId>spring-kafka-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+<!--		<dependency>-->
+<!--			<groupId>org.springframework.cloud</groupId>-->
+<!--			<artifactId>spring-cloud-netflix-eureka-client</artifactId>-->
+<!--			<version>3.0.4</version>-->
+<!--		</dependency>-->
 	</dependencies>
+
+	<dependencyManagement>
+
+		<dependencies>
+
+			<dependency>
+
+				<groupId>org.springframework.cloud</groupId>
+
+				<artifactId>spring-cloud-dependencies</artifactId>
+
+				<version>${spring-cloud.version}</version>
+
+				<type>pom</type>
+
+				<scope>import</scope>
+
+			</dependency>
+
+		</dependencies>
+
+	</dependencyManagement>
 
 	<build>
 		<plugins>
@@ -76,6 +108,35 @@
 					</excludes>
 				</configuration>
 			</plugin>
+
+			<plugin>
+				<groupId>com.spotify</groupId>
+				<artifactId>dockerfile-maven-plugin</artifactId>
+				<version>1.4.13</version>
+				<executions>
+					<execution>
+						<id>default</id>
+						<goals>
+							<goal>build</goal>
+							<goal>push</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<repository>djff94/final-order-service</repository>
+					<tag>${project.version}</tag>
+					<useMavenSettingsForAuth>true</useMavenSettingsForAuth>
+				</configuration>
+				<dependencies>
+					<!-- To make this work on JDK 9+ -->
+					<dependency>
+						<groupId>jakarta.activation</groupId>
+						<artifactId>jakarta.activation-api</artifactId>
+						<version>1.2.2</version>
+					</dependency>
+				</dependencies>
+			</plugin>
+
 		</plugins>
 	</build>
 
