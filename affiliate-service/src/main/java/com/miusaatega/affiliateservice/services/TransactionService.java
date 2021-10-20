@@ -19,7 +19,8 @@ public class TransactionService {
 
     public TransactionDto save(TransactionDto paramDTO){
         var param = TransactionAdapter.getTransaction(paramDTO);
-        param.setAmount(param.getProducts().stream().
+        if(param.getAmount() == null || param.getAmount() == 0)
+            param.setAmount(param.getProducts().stream().
                 reduce(0.00, (total, p2) -> total + (p2.getPrice() * p2.getQuantity()), Double::sum));
         return TransactionAdapter.getTransactionDTO(transactionRepository.save(param));
     }
