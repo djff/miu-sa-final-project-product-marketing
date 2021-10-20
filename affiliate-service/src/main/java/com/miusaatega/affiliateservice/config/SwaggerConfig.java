@@ -1,4 +1,4 @@
-package com.miusaatega.authgatewayservice.config;
+package com.miusaatega.affiliateservice.config;
 
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
@@ -38,8 +38,8 @@ public class SwaggerConfig {
                 )
                 .info(
                         new Info()
-                                .title("SA Final Project - Affiliate")
-                                .description("Rest Api for SA Final Project - Affiliate")
+                                .title("SA Final Project - Auth")
+                                .description("Rest Api for SA Final Project - Auth")
                                 .version("1.0")
                 );
     }

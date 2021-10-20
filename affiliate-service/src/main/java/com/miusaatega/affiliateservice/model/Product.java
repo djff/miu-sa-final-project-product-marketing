@@ -15,6 +15,6 @@ import java.util.List;
 @NoArgsConstructor
 public class Product implements Serializable {
     private String id;
-    private Double amount;
+    private Double price;
     private long quantity;
 }

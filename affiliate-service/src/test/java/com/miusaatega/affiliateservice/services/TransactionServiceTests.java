@@ -43,15 +43,20 @@ public class TransactionServiceTests {
 
         Mockito.when(transactionRepository.findById(testData.get(0).getId()))
                 .thenReturn(Optional.of(TransactionAdapter.getTransaction(testData.get(0))));
+
+        var sample = TransactionAdapter.getTransaction(testData.get(0));
+        sample.setAmount(340.00);
+        Mockito.when(transactionRepository.save(sample))
+                .thenReturn(sample);
     }
 
 
     @Test
     void testCreateTransaction() {
         var sample = testData.get(0);
-        transactionService.save(sample);
-        TransactionDto p1 = transactionService.findById(sample.getId());
-        Assertions.assertNotNull(p1);
+        TransactionDto p1 = transactionService.save(sample);
+        System.out.println(p1);
+        Assertions.assertEquals(p1.getAmount(), 340.00);
     }
 
     @Test
