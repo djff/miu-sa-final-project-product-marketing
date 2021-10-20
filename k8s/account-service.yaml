@@ -5,7 +5,7 @@ metadata:
   labels:
     app: accounts-service-app
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: accounts-service-app
@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: accounts-service-app
-          image: 3d3naj/account-service:0.0.1-SNAPSHOT
+          image: djff94/final-account-service:0.0.1-SNAPSHOT
           imagePullPolicy: Always
           ports:
             - containerPort: 8282
@@ -25,6 +25,11 @@ spec:
               value: mongodb://mongo:27017/accounts
             - name: REDIS_HOST
               value: redis
+            - name: EUREKA_URI
+              valueFrom:
+                configMapKeyRef:
+                  name: eureka-uri
+                  key: key
 
 ---
 
