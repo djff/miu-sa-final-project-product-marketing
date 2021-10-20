@@ -1,5 +1,7 @@
 
 spring:
+  application:
+    name: order-service
   kafka:
     consumer:
       bootstrap-servers: localhost:9092
