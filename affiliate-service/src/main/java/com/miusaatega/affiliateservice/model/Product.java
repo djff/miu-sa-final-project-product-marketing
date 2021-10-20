@@ -14,7 +14,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Product implements Serializable {
-    private String id;
+    private String productId;
     private Double price;
     private long quantity;
 }
