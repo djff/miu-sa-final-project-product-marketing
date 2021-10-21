@@ -109,7 +109,7 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <repository>3d3naj/notification-service</repository>
+                    <repository>djff94/final-notification-service</repository>
                     <tag>${project.version}</tag>
                     <useMavenSettingsForAuth>true</useMavenSettingsForAuth>
                 </configuration>

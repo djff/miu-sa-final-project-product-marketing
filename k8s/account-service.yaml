@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: accounts-service-app
+  labels:
+    app: accounts-service-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: accounts-service-app
+  template:
+    metadata:
+      labels:
+        app: accounts-service-app
+    spec:
+      containers:
+        - name: accounts-service-app
+          image: djff94/final-account-service:0.0.1-SNAPSHOT
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8282
+          env:
+            - name: MONGO_URL
+              value: mongodb://mongo:27017/accounts
+            - name: REDIS_HOST
+              value: redis
+            - name: ZIPKIN_URL
+              value: http://zipkin:9411/
+            - name: EUREKA_URI
+              valueFrom:
+                configMapKeyRef:
+                  name: eureka-uri
+                  key: key
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: accounts-service-svc
+spec:
+  selector:
+    app: accounts-service-app
+  ports:
+  - port: 80
+    targetPort: 8282

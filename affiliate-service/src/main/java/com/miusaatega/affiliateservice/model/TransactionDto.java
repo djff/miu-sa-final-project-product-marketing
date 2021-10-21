@@ -12,6 +12,7 @@ import java.util.List;
 @NoArgsConstructor
 public class TransactionDto {
     private String id;
+    private String transRef;
     private Double amount;
     private List<Product> products;
     private LocalDateTime transDate;
