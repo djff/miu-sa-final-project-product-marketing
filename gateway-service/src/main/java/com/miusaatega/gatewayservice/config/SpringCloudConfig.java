@@ -22,7 +22,7 @@ public class SpringCloudConfig {
                         .uri("lb://ACCOUNT-SERVICE"))
 //                .route("payment-service", r -> r.path("/api/payment/**", "/actuator/**")
 //                        .uri("lb://PAYMENT-SERVICE"))
-                .route("order-service", r -> r.path("/orders/**")
+                .route("order-service", r -> r.path("/api/orders/**")
                         .filters(f -> f.filter(filter))
                         .uri("lb://ORDER-SERVICE"))
                 .build();
