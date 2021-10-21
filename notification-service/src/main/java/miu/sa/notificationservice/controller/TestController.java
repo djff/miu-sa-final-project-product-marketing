@@ -37,7 +37,7 @@ public class TestController {
         headers.set("TOKEN", "YXBpLXNlcnZpY2UtYWNjb3VudDpwd2QkMjAyMQ==");
         HttpEntity<String> httpEntity = new HttpEntity<>("some body", headers);
 
-        ResponseEntity<String> response = restTemplate.exchange("http://localhost:8282/api/customer", HttpMethod.GET, httpEntity, String.class);
+        ResponseEntity<String> response = restTemplate.exchange("http://localhost:8282/api/account/customer", HttpMethod.GET, httpEntity, String.class);
         return "<h1>Hello from the " + response.getBody() + "!</h1>";
     }
 
