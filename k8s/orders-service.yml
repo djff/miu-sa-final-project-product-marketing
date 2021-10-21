@@ -27,6 +27,10 @@ spec:
         env:
           - name: MONGO_URL
             value: mongodb://mongo:27017/orders
+          - name: KAFKA_SERVER
+            value: kafka-broker:9092
+          - name: ZIPKIN_URL
+            value: http://zipkin:9411/
           - name: EUREKA_URI
             valueFrom:
               configMapKeyRef:

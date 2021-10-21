@@ -25,6 +25,11 @@ spec:
               value: kafka-broker:9092
             - name: ZIPKIN_URL
               value: http://zipkin:9411/
+            - name: EUREKA_URI
+              valueFrom: 
+                configMapKeyRef:
+                  name: eureka-uri
+                  key: key
 
 ---
 

@@ -33,6 +33,8 @@ spec:
         ports:
           - containerPort: 9191
         env:
+          - name: ZIPKIN_URL
+            value: http://zipkin:9411/
           - name: S2S_LOCAL_TOKEN
             value: YXBpLXNlcnZpY2UtYWNjb3VudDpwd2QkMjAyMQ==
           - name: EUREKA_URI
