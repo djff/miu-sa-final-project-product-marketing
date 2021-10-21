@@ -7,6 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.util.List;
 import java.util.Optional;
@@ -23,12 +26,16 @@ public class ProductService {
         this.productRepository = productRepository;
     }
 
+    public ProductService() {
+
+    }
+
     @Cacheable(value = "products")
     public List<Product> findAll(){
         return  productRepository.findAll();
     }
 
-    @Cacheable(value=" product", key = "productId")
+    @Cacheable(value=" product", key = "#productId")
     public Optional<Product> findById(UUID productId){
         return productRepository.findById(productId);
     }
@@ -38,10 +45,16 @@ public class ProductService {
         return productRepository.save(stock);
     }
 
-    @CacheEvict(cacheNames="products", key = "#productId")
-    public void deleteById(UUID productId){
-         productRepository.deleteById(productId);
-    }
+   // @CacheEvict(cacheNames="products", key = "#productId")
+    //public void deleteById(UUID productId){
+       //  productRepository.deleteById(productId);
+   // }
+
+
+//    @CacheEvict(value = "product", key = "#productId")
+//    public void deleteById(@PathVariable("productId") UUID productId) {
+//        productRepository.deleteById(productId);
+//    }
 
     public ProductDTO addMore(ProductDTO productDTO) {
         Product product = productRepository.save( productDTO.toEntity() );
@@ -67,7 +80,6 @@ public class ProductService {
             productRepository.save(curProduct);
         }
     }
-
     public void increase(UUID productId, int quantity) {
         var product = findById(productId);
         if (product.isPresent()) {
@@ -84,10 +96,23 @@ public class ProductService {
     @Cacheable(value="name", key = "productId")
     public List<ProductDTO> findByName(String name) {
         List<Product> products = productRepository.findByName( name );
-        return products.stream()
+
+       return products.stream()
                 .map( ProductDTO::of )
                 .collect( Collectors.toList() );
     }
+
+//    @Autowired
+//    public void setProductRepository(ProductRepository productRepository) {
+//        this.productRepository = productRepository;
+    //}
+    @CacheEvict(cacheNames="products", key = "#productId")
+    public void delete(UUID id) {
+        productRepository.deleteById(id);
+
+    }
+
+
 }
 
 

@@ -17,6 +17,7 @@ import java.util.UUID;
 public class Product implements Serializable {
     private static final long serialVersionUID = -7817224776021728682L;
 
+    @Id
     private UUID productId;
     private String name;
     private String vendor;

@@ -26,7 +26,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping(value="api")
 @AllArgsConstructor
 @Slf4j
 public class ProductController {
@@ -37,7 +37,7 @@ public class ProductController {
     @Autowired
     private Producer producer;
 
-    @GetMapping("pro1")
+    @GetMapping("find")
     public ResponseEntity<List<Product>> findAll() {
         return ResponseEntity.ok(productService.findAll());
     }
@@ -56,7 +56,6 @@ public class ProductController {
 
     @RequestMapping(value = "/set", method = RequestMethod.POST)
 
-    // @CachePut(value="/set", method=RequestMethod.POST)
     public ResponseEntity creat(@RequestBody Product product) {
         return ResponseEntity.status(HttpStatus.CREATED).body(productService.save(product));
     }
@@ -70,30 +69,27 @@ public class ProductController {
     }
 
     @PutMapping("/{productId}")
-    //@CachePut(cacheNames = "product", key = "productId")
-    public ResponseEntity<Product> update(@PathVariable Long productId, @RequestBody Product product) {
+    public ResponseEntity<Product> update(@PathVariable UUID productId, @RequestBody Product product) {
         return ResponseEntity.accepted().body(productService.save(product));
     }
 
-    @RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE)
+//   @RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE)
+//   public ResponseEntity<Object> delete(@PathVariable UUID productId) {
+//        productService.deleteById(productId);
+//        return new ResponseEntity<>("Product is deleted successfully", HttpStatus.OK);
+  //  }
+//@GetMapping()
+//    public ResponseEntity<Product> findByName(@PathVariable String name) {
+//        Optional<Product> product = productService.findByName( Strname);
+//        if (product.isPresent()) {
+//            return new ResponseEntity(product, HttpStatus.OK);
+//        } else {
+//            return new ResponseEntity(HttpStatus.NOT_FOUND);
+//        }
+//    }
 
-    public ResponseEntity delete(@PathVariable UUID productId) {
-
-        productService.deleteById(productId);
-        return ResponseEntity.accepted().build();
-    }
-
-    public ResponseEntity<Product> findByName(@PathVariable UUID productId) {
-        Optional<Product> product = productService.findById(productId);
-        if (product.isPresent()) {
-            return new ResponseEntity(product, HttpStatus.OK);
-        } else {
-            return new ResponseEntity(HttpStatus.NOT_FOUND);
-        }
-    }
-
-    @GetMapping("/{name}")
-    public List<ProductDTO> findByName(String name) {
+    @GetMapping(value="products/{name}")
+    public List<ProductDTO> findByName(@PathVariable String name) {
         List<ProductDTO> products = productService.findByName(name);
         return products;
     }
@@ -104,6 +100,15 @@ public class ProductController {
         producer.sendMessage(g.toJson(message));
         return ResponseEntity.ok().build();
     }
+//    @RequestMapping(value = "lastname/{lastname}", method = RequestMethod.GET)
+//    public List<Product> findByName(@PathVariable("lastname") String name) {
+//        return productService.findByName(name);
+//    }
+@DeleteMapping(value = "products/{id}")
+public ResponseEntity delete(@PathVariable UUID id) {
+    productService.delete(id);
+    return new ResponseEntity("Product is deleted successsfully", HttpStatus.OK);
+}
 }
 
 
