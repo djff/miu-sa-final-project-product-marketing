@@ -60,10 +60,10 @@ jobs:
     
     # Build the Maven service
     - name: Build Account Service
-      run: mvn package -DskipTests dockerfile:push --file account-service/pom.xml
+      run: mvn package -DskipTests --file account-service/pom.xml
       
     - name: Build Account Service
-      run: mvn package -DskipTests dockerfile:push --file product-service/pom.xml
+      run: mvn package -DskipTests --file product-service/pom.xml
     
     # Build the Docker image
     - name: Build Account Service Container
