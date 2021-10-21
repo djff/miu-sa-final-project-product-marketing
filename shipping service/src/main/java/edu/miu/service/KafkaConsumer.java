@@ -19,7 +19,7 @@ public class KafkaConsumer {
     private KafkaProducer kafkaProducer;
 
 
-    @KafkaListener(topics= "order_id", groupId = "group_id")
+    @KafkaListener(topics= "order_topic", groupId = "group_id")
     public void getMessage(String message){
         Gson gson = new Gson();
         HashMap<String, Object> response = gson.fromJson(message, HashMap.class);

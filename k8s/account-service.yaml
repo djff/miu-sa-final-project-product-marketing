@@ -25,6 +25,8 @@ spec:
               value: mongodb://mongo:27017/accounts
             - name: REDIS_HOST
               value: redis
+            - name: ZIPKIN_URL
+              value: http://zipkin:9411/
             - name: EUREKA_URI
               valueFrom:
                 configMapKeyRef:

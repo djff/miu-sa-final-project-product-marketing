@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: card-service-app
+  labels:
+    app: card-service-app
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: card-service-app
+  template:
+    metadata:
+      labels:
+        app: card-service-app
+    spec:
+      containers:
+      - name: card-service-app
+        image: djff94/card-service:0.0.1-SNAPSHOT
+        imagePullPolicy: Always
+        # resources:
+        #   limits:
+        #     memory: "128Mi"
+        #     cpu: "0.2"
+        ports:
+          - containerPort: 9595
+        env:
+          - name: EUREKA_URI
+            value: http://eureka-0.eureka.default.svc.cluster.local:8761/eureka
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: card-service-svc
+spec:
+  selector:
+    app: card-service-app
+  ports:
+  - port: 80
+    targetPort: 9595
+

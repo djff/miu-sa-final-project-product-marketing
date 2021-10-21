@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: shipping-service-app
+  labels:
+    app: shipping-service-app
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: shipping-service-app
+  template:
+    metadata:
+      labels:
+        app: shipping-service-app
+    spec:
+      containers:
+      - name: shipping-service-app
+        image: djff94/shipping-service:0.0.1-SNAPSHOT
+        imagePullPolicy: Always
+        # resources:
+        #   limits:
+        #     memory: "128Mi"
+        #     cpu: "0.2"
+        ports:
+          - containerPort: 8383
+        env:
+          - name: SPRING_DATASOURCE_PASSWORD
+            value: root
+          - name: SPRING_DATASOURCE_URL
+            value: jdbc:mysql://account-service-mysql-db:3306/testdb?createDatabaseIfNotExist=true&useSSL=false
+          - name: SPRING_DATASOURCE_USERNAME
+            value: root
+          - name: SPRING_JPA_HIBERNATE_DDL-AUTO
+            value: update
+          - name: EUREKA_URI
+            value: http://eureka-0.eureka.default.svc.cluster.local:8761/eureka
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: shipping-service-svc
+spec:
+  selector:
+    app: shipping-service-app
+  ports:
+  - port: 80
+    targetPort: 8383
+

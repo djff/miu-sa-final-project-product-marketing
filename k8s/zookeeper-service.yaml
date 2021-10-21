@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kafka-zk
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kafka-zk
+      component: kafka-zk
+  template:
+    metadata:
+      labels:
+        app: kafka-zk
+        component: kafka-zk
+    spec:
+      containers:
+        - name: kafka-zk
+          image: zookeeper
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 2181
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: kafka-zk
+spec:
+  selector:
+    app: kafka-zk
+    component: kafka-zk
+  ports: 
+    - port: 2181
+      targetPort: 2181
+  
+
+

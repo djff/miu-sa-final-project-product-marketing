@@ -19,7 +19,7 @@ public class Consumer {
         this.emailSenderService = emailSenderService;
     }
     //consume topics and execute tasks
-    @KafkaListener(topics="notification-topic", groupId="mygroup")
+    @KafkaListener(topics="notification-topic", groupId="group_id")
     public void consumeFromOrder(String message) {
         log.info("Consumed message from Order service => " + message);
         JSONObject r = new JSONObject(message);
