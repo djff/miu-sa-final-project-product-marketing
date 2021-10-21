@@ -25,6 +25,9 @@ public class SpringCloudConfig {
                 .route("order-service", r -> r.path("/api/orders/**")
                         .filters(f -> f.filter(filter))
                         .uri("lb://ORDER-SERVICE"))
+                .route("product-service", r -> r.path("/api/product/**")
+                        .filters(f -> f.filter(filter))
+                        .uri("lb://PRODUCT-SERVICE"))
                 .build();
     }
 
