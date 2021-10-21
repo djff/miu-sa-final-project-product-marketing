@@ -65,22 +65,22 @@ jobs:
     - name: Build Account Service
       run: mvn package -DskipTests --file product-service/pom.xml
     
-    # Build the Docker image
-    - name: Build Account Service Container
-      run: |-
-        docker build -f "account-service/Dockerfile" \
-          --tag "gcr.io/$PROJECT_ID/$ACCOUNT_SERVICE_NAME:$GITHUB_SHA" \
-          --build-arg GITHUB_SHA="$GITHUB_SHA" \
-          --build-arg GITHUB_REF="$GITHUB_REF" \
-          .
+#     # Build the Docker image
+#     - name: Build Account Service Container
+#       run: |-
+#         docker build -f "account-service/Dockerfile" \
+#           --tag "gcr.io/$PROJECT_ID/$ACCOUNT_SERVICE_NAME:$GITHUB_SHA" \
+#           --build-arg GITHUB_SHA="$GITHUB_SHA" \
+#           --build-arg GITHUB_REF="$GITHUB_REF" \
+#           .
           
-    - name: Build Product Service
-      run: |-
-        docker build -f "product-service/Dockerfile" \
-          --tag "gcr.io/$PROJECT_ID/$PRODUCT_SERVICE_NAME:$GITHUB_SHA" \
-          --build-arg GITHUB_SHA="$GITHUB_SHA" \
-          --build-arg GITHUB_REF="$GITHUB_REF" \
-          .
+#     - name: Build Product Service
+#       run: |-
+#         docker build -f "product-service/Dockerfile" \
+#           --tag "gcr.io/$PROJECT_ID/$PRODUCT_SERVICE_NAME:$GITHUB_SHA" \
+#           --build-arg GITHUB_SHA="$GITHUB_SHA" \
+#           --build-arg GITHUB_REF="$GITHUB_REF" \
+#           .
 
     # Push the Docker image to Google Container Registry
     - name: Publish Account Service
