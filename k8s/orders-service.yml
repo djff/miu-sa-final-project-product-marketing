@@ -26,7 +26,7 @@ spec:
           - containerPort: 9292
         env:
           - name: MONGO_URL
-            value: mongodb://mongo:27017/orders
+            value: mongodb://mongo:27017/order
           - name: KAFKA_SERVER
             value: kafka-broker:9092
           - name: ZIPKIN_URL
