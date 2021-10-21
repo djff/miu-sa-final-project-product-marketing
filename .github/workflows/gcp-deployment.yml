@@ -24,8 +24,9 @@ env:
   PROJECT_ID: ${{ secrets.GKE_PROJECT }}
   GKE_CLUSTER: cluster-1    # TODO: update to cluster name
   GKE_ZONE: us-central1-c   # TODO: update to cluster zone
-  DEPLOYMENT_NAME: registry-service # TODO: update to deployment name
-  IMAGE: final-registry-service
+  ACCOUNT_SERVICE_NAME: account-service # TODO: update to deployment name
+  PRODUCT_SERVICE_NAME: product-service # TODO: update to deployment name
+  IMAGE: final-account-service
 
 jobs:
   setup-build-publish-deploy:
@@ -57,18 +58,30 @@ jobs:
         credentials: ${{ secrets.GKE_SA_KEY }}
 
     # Build the Docker image
-    - name: Build
+    - name: Build Account Service
       run: |-
         docker build \
-          --tag "gcr.io/$PROJECT_ID/$IMAGE:$GITHUB_SHA" \
+          --tag "gcr.io/$PROJECT_ID/$ACCOUNT_SERVICE_NAME:$GITHUB_SHA" \
+          --build-arg GITHUB_SHA="$GITHUB_SHA" \
+          --build-arg GITHUB_REF="$GITHUB_REF" \
+          .
+          
+    - name: Build Product Service
+      run: |-
+        docker build \
+          --tag "gcr.io/$PROJECT_ID/$PRODUCT_SERVICE_NAME:$GITHUB_SHA" \
           --build-arg GITHUB_SHA="$GITHUB_SHA" \
           --build-arg GITHUB_REF="$GITHUB_REF" \
           .
 
     # Push the Docker image to Google Container Registry
-    - name: Publish
+    - name: Publish Account Service
       run: |-
-        docker push "gcr.io/$PROJECT_ID/$IMAGE:$GITHUB_SHA"
+        docker push "gcr.io/$PROJECT_ID/$ACCOUNT_SERVICE_NAME:$GITHUB_SHA"
+        
+    - name: Publish Product Service
+      run: |-
+        docker push "gcr.io/$PROJECT_ID/$PRODUCT_SERVICE_NAME:$GITHUB_SHA"
 
     # Set up kustomize
     - name: Set up Kustomize
@@ -77,9 +90,15 @@ jobs:
         chmod u+x ./kustomize
 
     # Deploy the Docker image to the GKE cluster
-    - name: Deploy
+    - name: Deploy Account Service
       run: |-
-        ./kustomize edit set image gcr.io/PROJECT_ID/IMAGE:TAG=gcr.io/$PROJECT_ID/$IMAGE:$GITHUB_SHA
+        ./kustomize edit set image gcr.io/PROJECT_ID/ACCOUNT_SERVICE_IMAGE:TAG=gcr.io/$PROJECT_ID/$ACCOUNT_SERVICE_NAME:$GITHUB_SHA
         ./kustomize build . | kubectl apply -f -
-        kubectl rollout status deployment/$DEPLOYMENT_NAME
+        kubectl rollout status deployment/$ACCOUNT_SERVICE_NAME
+        kubectl get services -o wide
+    - name: Deploy Product Service
+      run: |-
+        ./kustomize edit set image gcr.io/PROJECT_ID/PRODUCT_SERVICE_IMAGE:TAG=gcr.io/$PROJECT_ID/$PRODUCT_SERVICE_NAME:$GITHUB_SHA
+        ./kustomize build . | kubectl apply -f -
+        kubectl rollout status deployment/$PRODUCT_SERVICE_NAME
         kubectl get services -o wide
