@@ -85,11 +85,13 @@ jobs:
     # Push the Docker image to Google Container Registry
     - name: Publish Account Service
       run: |-
-        docker push "gcr.io/$PROJECT_ID/$ACCOUNT_SERVICE_NAME:$GITHUB_SHA"
+        docker push "djff94/final-account-service:0.0.1-SNAPSHOT"
+#         docker push "gcr.io/$PROJECT_ID/$ACCOUNT_SERVICE_NAME:$GITHUB_SHA"
         
     - name: Publish Product Service
       run: |-
-        docker push "gcr.io/$PROJECT_ID/$PRODUCT_SERVICE_NAME:$GITHUB_SHA"
+        docker push "djff94/final-product-service:0.0.1-SNAPSHOT"
+#         docker push "gcr.io/$PROJECT_ID/$PRODUCT_SERVICE_NAME:$GITHUB_SHA"
 
     # Set up kustomize
     - name: Set up Kustomize
