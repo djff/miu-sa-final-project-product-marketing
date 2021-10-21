@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: affiliate-service-app
+  labels:
+    app: affiliate-service-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: affiliate-service-app
+  template:
+    metadata:
+      labels:
+        app: affiliate-service-app
+    spec:
+      containers:
+      - name: affiliate-service-app
+        image: djff94/final-affiliate-service:0.0.1-SNAPSHOT
+        imagePullPolicy: Always
+        # resources:
+        #   limits:
+        #     memory: "128Mi"
+        #     cpu: "500m"
+        ports:
+          - containerPort: 8383
+        env:
+          - name: MONGO_URL
+            value: mongodb://mongo:27017/affiliate
+          - name: EUREKA_URI
+            valueFrom:
+              configMapKeyRef:
+                name: eureka-uri
+                key: key
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: affiliate-service-svc
+spec:
+  selector:
+    app: affiliate-service-app
+  ports:
+  - port: 80
+    targetPort: 8383
+

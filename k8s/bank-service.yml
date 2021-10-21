@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bank-service-app
+  labels:
+    app: bank-service-app
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: bank-service-app
+  template:
+    metadata:
+      labels:
+        app: bank-service-app
+    spec:
+      containers:
+      - name: bank-service-app
+        image: djff94/bank-service:0.0.1-SNAPSHOT
+        imagePullPolicy: Always
+        # resources:
+        #   limits:
+        #     memory: "128Mi"
+        #     cpu: "0.2"
+        ports:
+          - containerPort: 9494
+        env:
+          - name: EUREKA_URI
+            value: http://eureka-0.eureka.default.svc.cluster.local:8761/eureka
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: bank-service-svc
+spec:
+  selector:
+    app: bank-service-app
+  ports:
+  - port: 80
+    targetPort: 9494
+

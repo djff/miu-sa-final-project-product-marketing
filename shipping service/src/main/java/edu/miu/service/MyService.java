@@ -4,9 +4,9 @@ import edu.miu.model.ResponseFormat;
 import edu.miu.model.Shipment;
 import edu.miu.repository.ShipmentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
 import java.util.Random;
 import java.util.UUID;
 
@@ -27,12 +27,16 @@ public class MyService {
         Random r = new Random(System.currentTimeMillis());
         return 10000 + r.nextInt(20000);
     }
+    public Shipment findShipment(UUID id){
+        return  shipmentRepository.findById(id).get();
+    }
 
     public Shipment processOrder(UUID Id){
         Shipment shipment = new Shipment();
         shipment.setOrderId(Id);
         shipment.setTrackingNumber(getTrackingNumber());
         shipment.setStatus("shipped");
+        System.out.println(shipmentRepository.save(shipment));
         return shipmentRepository.save(shipment);
     }
     public ResponseFormat processResponse(UUID Id){
@@ -42,5 +46,6 @@ public class MyService {
         responseFormat.setData(processOrder(Id));
         return responseFormat;
     }
+
 
 }

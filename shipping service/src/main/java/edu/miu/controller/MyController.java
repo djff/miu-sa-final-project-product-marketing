@@ -11,20 +11,20 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 @RestController
-@RequestMapping("api/shipping")
+@RequestMapping("/api/shipping")
 public class MyController {
     @Autowired
     private MyService myService;
     @Autowired
     private KafkaProducer kafkaProducer;
 
-    @GetMapping("{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<ResponseFormat> shippingStatus(@PathVariable UUID id){
         return ResponseEntity.ok(myService.processResponse(id));
 
     }
 
-    @PostMapping("produce")
+    @PostMapping("/produce")
     public ResponseEntity<Void> produce(@RequestBody ResponseFormat s){
         this.kafkaProducer.writeMessage(s);
         return ResponseEntity.ok().build();

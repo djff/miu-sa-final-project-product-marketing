@@ -19,7 +19,7 @@ public class KafkaConsumer {
     private KafkaProducer kafkaProducer;
 
 
-    @KafkaListener(topics= "kafka_topic", groupId = "mygroup")
+    @KafkaListener(topics= "order_topic", groupId = "group_id")
     public void getMessage(String message){
         Gson gson = new Gson();
         HashMap<String, Object> response = gson.fromJson(message, HashMap.class);
@@ -27,6 +27,7 @@ public class KafkaConsumer {
         UUID orderId = (UUID) response.get("orderId");
         if(isPaid) {
             ResponseFormat responseShipped = myService.processResponse(orderId);
+            kafkaProducer.writeMessage(gson.toJson(responseShipped.getData()));
         }
 
         System.out.println(response.get("isPaid"));

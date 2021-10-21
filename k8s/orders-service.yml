@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: orders-service-app
+  labels:
+    app: orders-service-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: orders-service-app
+  template:
+    metadata:
+      labels:
+        app: orders-service-app
+    spec:
+      containers:
+      - name: orders-service-app
+        image: djff94/final-order-service:0.0.1-SNAPSHOT
+        imagePullPolicy: Always
+        # resources:
+        #   limits:
+        #     memory: "128Mi"
+        #     cpu: "500m"
+        ports:
+          - containerPort: 9292
+        env:
+          - name: MONGO_URL
+            value: mongodb://mongo:27017/orders
+          - name: EUREKA_URI
+            valueFrom:
+              configMapKeyRef:
+                name: eureka-uri
+                key: key
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: orders-service-svc
+spec:
+  selector:
+    app: orders-service-app
+  ports:
+  - port: 80
+    targetPort: 9292
+
