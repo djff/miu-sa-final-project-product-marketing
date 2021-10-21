@@ -1,0 +1,115 @@
+# This workflow will build a docker container, publish it to Google Container Registry, and deploy it to GKE when there is a push to the master branch.
+#
+# To configure this workflow:
+#
+# 1. Ensure that your repository contains the necessary configuration for your Google Kubernetes Engine cluster, including deployment.yml, kustomization.yml, service.yml, etc.
+#
+# 2. Set up secrets in your workspace: GKE_PROJECT with the name of the project and GKE_SA_KEY with the Base64 encoded JSON service account key (https://github.com/GoogleCloudPlatform/github-actions/tree/docs/service-account-key/setup-gcloud#inputs).
+#
+# 3. Change the values for the GKE_ZONE, GKE_CLUSTER, IMAGE, and DEPLOYMENT_NAME environment variables (below).
+#
+# For more support on how to run the workflow, please visit https://github.com/google-github-actions/setup-gcloud/tree/master/example-workflows/gke
+
+name: Build and Deploy to GKE
+
+on:
+  push:
+    branches:
+      - release
+  release:
+    types: [created]
+  workflow_dispatch:
+
+env:
+  PROJECT_ID: ${{ secrets.GKE_PROJECT }}
+  GKE_CLUSTER: cluster-1    # TODO: update to cluster name
+  GKE_ZONE: us-central1-c   # TODO: update to cluster zone
+  ACCOUNT_SERVICE_NAME: account-service # TODO: update to deployment name
+  PRODUCT_SERVICE_NAME: product-service # TODO: update to deployment name
+  IMAGE: final-account-service
+
+jobs:
+  setup-build-publish-deploy:
+    name: Setup, Build, Publish, and Deploy
+    runs-on: ubuntu-latest
+    environment: staging
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    # Setup gcloud CLI
+    - uses: google-github-actions/setup-gcloud@v0.2.0
+      with:
+        service_account_key: ${{ secrets.GKE_SA_KEY }}
+        project_id: ${{ secrets.GKE_PROJECT }}
+        export_default_credentials: true
+
+    # Configure Docker to use the gcloud command-line tool as a credential
+    # helper for authentication
+    - run: |-
+        gcloud --quiet auth configure-docker
+
+    # Get the GKE credentials so we can deploy to the cluster
+    - uses: google-github-actions/get-gke-credentials@v0.2.1
+      with:
+        cluster_name: ${{ env.GKE_CLUSTER }}
+        location: ${{ env.GKE_ZONE }}
+        credentials: ${{ secrets.GKE_SA_KEY }}
+
+    
+    # Build the Maven service
+    - name: Build Account Service
+      run: mvn package -DskipTests --file account-service/pom.xml
+      
+    - name: Build Account Service
+      run: mvn package -DskipTests --file product-service/pom.xml
+    
+#     # Build the Docker image
+#     - name: Build Account Service Container
+#       run: |-
+#         docker build -f "account-service/Dockerfile" \
+#           --tag "gcr.io/$PROJECT_ID/$ACCOUNT_SERVICE_NAME:$GITHUB_SHA" \
+#           --build-arg GITHUB_SHA="$GITHUB_SHA" \
+#           --build-arg GITHUB_REF="$GITHUB_REF" \
+#           .
+          
+#     - name: Build Product Service
+#       run: |-
+#         docker build -f "product-service/Dockerfile" \
+#           --tag "gcr.io/$PROJECT_ID/$PRODUCT_SERVICE_NAME:$GITHUB_SHA" \
+#           --build-arg GITHUB_SHA="$GITHUB_SHA" \
+#           --build-arg GITHUB_REF="$GITHUB_REF" \
+#           .
+
+    # Push the Docker image to Google Container Registry
+    - name: Publish Account Service
+      run: |-
+        docker push "djff94/final-account-service:0.0.1-SNAPSHOT"
+#         docker push "gcr.io/$PROJECT_ID/$ACCOUNT_SERVICE_NAME:$GITHUB_SHA"
+        
+    - name: Publish Product Service
+      run: |-
+        docker push "djff94/final-product-service:0.0.1-SNAPSHOT"
+#         docker push "gcr.io/$PROJECT_ID/$PRODUCT_SERVICE_NAME:$GITHUB_SHA"
+
+    # Set up kustomize
+    - name: Set up Kustomize
+      run: |-
+        curl -sfLo kustomize https://github.com/kubernetes-sigs/kustomize/releases/download/v3.1.0/kustomize_3.1.0_linux_amd64
+        chmod u+x ./kustomize
+
+    # Deploy the Docker image to the GKE cluster
+    - name: Deploy Account Service
+      run: |-
+        ./kustomize edit set image gcr.io/PROJECT_ID/ACCOUNT_SERVICE_IMAGE:TAG=gcr.io/$PROJECT_ID/$ACCOUNT_SERVICE_NAME:$GITHUB_SHA
+        ./kustomize build . | kubectl apply -f -
+        kubectl rollout status deployment/$ACCOUNT_SERVICE_NAME
+        kubectl get services -o wide
+        
+    - name: Deploy Product Service
+      run: |-
+        ./kustomize edit set image gcr.io/PROJECT_ID/PRODUCT_SERVICE_IMAGE:TAG=gcr.io/$PROJECT_ID/$PRODUCT_SERVICE_NAME:$GITHUB_SHA
+        ./kustomize build . | kubectl apply -f -
+        kubectl rollout status deployment/$PRODUCT_SERVICE_NAME
+        kubectl get services -o wide
