@@ -2,11 +2,13 @@ package com.miu.sa.orderservice.models;
 
 import lombok.*;
 
+import java.util.UUID;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class Product {
-    private Long productId;
+    private UUID productId;
     private int quantity;
     private double price;
     private double markUp;
