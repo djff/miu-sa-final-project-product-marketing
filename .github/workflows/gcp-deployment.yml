@@ -57,8 +57,16 @@ jobs:
         location: ${{ env.GKE_ZONE }}
         credentials: ${{ secrets.GKE_SA_KEY }}
 
-    # Build the Docker image
+    
+    # Build the Maven service
     - name: Build Account Service
+      run: mvn package -DskipTests dockerfile:push --file account-service/pom.xml
+      
+    - name: Build Account Service
+      run: mvn package -DskipTests dockerfile:push --file product-service/pom.xml
+    
+    # Build the Docker image
+    - name: Build Account Service Container
       run: |-
         docker build -f "account-service/Dockerfile" \
           --tag "gcr.io/$PROJECT_ID/$ACCOUNT_SERVICE_NAME:$GITHUB_SHA" \
@@ -96,6 +104,7 @@ jobs:
         ./kustomize build . | kubectl apply -f -
         kubectl rollout status deployment/$ACCOUNT_SERVICE_NAME
         kubectl get services -o wide
+        
     - name: Deploy Product Service
       run: |-
         ./kustomize edit set image gcr.io/PROJECT_ID/PRODUCT_SERVICE_IMAGE:TAG=gcr.io/$PROJECT_ID/$PRODUCT_SERVICE_NAME:$GITHUB_SHA
