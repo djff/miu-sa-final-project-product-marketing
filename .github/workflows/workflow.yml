@@ -48,7 +48,7 @@ jobs:
           MAVEN_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
 
     - name: Build and Pushing bank service
-      run: mvn package dockerfile:push --file -DskipTests BankService/pom.xml
+      run: mvn package -DskipTests dockerfile:push --file BankService/pom.xml
       env:
           MAVEN_USERNAME: ${{ secrets.DOCKER_USERNAME }}
           MAVEN_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
