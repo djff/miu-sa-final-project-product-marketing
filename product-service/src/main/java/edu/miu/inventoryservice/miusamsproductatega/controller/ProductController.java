@@ -26,7 +26,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @RestController
-@RequestMapping(value="api")
+@RequestMapping(value="/api/products")
 @AllArgsConstructor
 @Slf4j
 public class ProductController {
@@ -37,7 +37,7 @@ public class ProductController {
     @Autowired
     private Producer producer;
 
-    @GetMapping("find")
+    @GetMapping
     public ResponseEntity<List<Product>> findAll() {
         return ResponseEntity.ok(productService.findAll());
     }
