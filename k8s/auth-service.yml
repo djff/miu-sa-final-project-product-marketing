@@ -29,6 +29,8 @@ spec:
             value: YXBpLXNlcnZpY2UtYWNjb3VudDpwd2QkMjAyMQ==
           - name: EUREKA_URI
             value: http://eureka-0.eureka.default.svc.cluster.local:8761/eureka
+          - name: ZIPKIN_URL
+            value: http://zipkin:9411/
 
 ---
 

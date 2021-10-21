@@ -28,10 +28,12 @@ spec:
               configMapKeyRef:
                 name: eureka-uri
                 key: key
-          - name: EUREKA_URI
-            value: http://eureka-0.eureka.default.svc.cluster.local:8761/eureka
           - name: S2S_LOCAL_TOKEN
             value: YXBpLXNlcnZpY2UtYWNjb3VudDpwd2QkMjAyMQ==
+          - name: KAFKA_SERVER
+            value: kafka-broker:9092
+          - name: ZIPKIN_URL
+            value: http://zipkin:9411/
 ---
 
 apiVersion: v1

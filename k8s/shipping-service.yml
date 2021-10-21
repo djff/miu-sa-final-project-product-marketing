@@ -25,16 +25,17 @@ spec:
         ports:
           - containerPort: 8383
         env:
-          - name: SPRING_DATASOURCE_PASSWORD
-            value: root
-          - name: SPRING_DATASOURCE_URL
-            value: jdbc:mysql://account-service-mysql-db:3306/testdb?createDatabaseIfNotExist=true&useSSL=false
-          - name: SPRING_DATASOURCE_USERNAME
-            value: root
-          - name: SPRING_JPA_HIBERNATE_DDL-AUTO
-            value: update
+          - name: MONGO_URL
+            value: mongodb://mongo:27017/orders
+          - name: KAFKA_SERVER
+            value: kafka-broker:9092
+          - name: ZIPKIN_URL
+            value: http://zipkin:9411/
           - name: EUREKA_URI
-            value: http://eureka-0.eureka.default.svc.cluster.local:8761/eureka
+            valueFrom:
+              configMapKeyRef:
+                name: eureka-uri
+                key: key
 
 ---
 
