@@ -24,7 +24,7 @@ env:
   GKE_CLUSTER: cluster-1    # TODO: update to cluster name
   GKE_ZONE: us-central1-c   # TODO: update to cluster zone
   DEPLOYMENT_NAME: registry-service # TODO: update to deployment name
-  IMAGE: djff94/final-registry-service:0.0.1-SNAPSHOT
+  IMAGE: final-registry-service
 
 jobs:
   setup-build-publish-deploy:
