@@ -87,6 +87,9 @@ public class OrderService {
 
     @KafkaListener(topics = "payment-response-topic", groupId = "group_id")
     public void setOrderAsPaid(String json){
+        System.out.println("#######################");
+        System.out.println(json);
+        System.out.println("**************************");
         PaymentMessage paymentMessage = new Gson().fromJson(json, PaymentMessage.class);
         var order = orderRepository.findById(paymentMessage.paymentResponse.orderNumber).get();
 
@@ -98,20 +101,20 @@ public class OrderService {
 
         var orderProduct = new OrderProductMessage();
         orderProduct.orderId = order.getOrderId();
-        if(paymentMessage.successful){
-            // set products for shipment service
-            orderProduct.productList = order.getProductList();
-            kafkaOrderTemplate.send(ORDER_TOPIC, new Gson().toJson(orderProduct));
+//        if(paymentMessage.successful){
+        // set products for shipment service
+        orderProduct.productList = order.getProductList();
+        kafkaOrderTemplate.send(ORDER_TOPIC, new Gson().toJson(orderProduct));
 
-            // set products for affiliate
-            orderProduct.productList =
-                    order.getProductList()
-                            .stream()
-                            .filter(p -> p.getAffiliateId() != null)
-                            .collect(Collectors.toList());
-            kafkaAffiliateTemplate.send(AFFILIATE_TOPIC, new Gson().toJson(orderProduct));
+        // set products for affiliate
+        orderProduct.productList =
+                order.getProductList()
+                        .stream()
+                        .filter(p -> p.getAffiliateId() != null)
+                        .collect(Collectors.toList());
+        kafkaAffiliateTemplate.send(AFFILIATE_TOPIC, new Gson().toJson(orderProduct));
 
-        }
+//        }
     }
 
     private void createNotifyMessage(Order order, String message){
