@@ -66,23 +66,23 @@ public class TransactionService {
         }
 
         //TODO: update payment with response from transaction services
-        var transactionDetails = transactionPersistor.findTransaction(payReference);
-        if(transactionDetails == null){
-            transactionDetails.responseCode = response.getResponseCode();
-            transactionDetails.responseTime = LocalDateTime.now();
-            transactionDetails.status = PaymentStatus.FAILED;
-            transactionPersistor.updateTransaction(transactionDetails, response.getSuccessful());
-
-            response.setResponseCode("99");
-            response.setResponseDescription("Payment NOT successful");
-            response.setPaymentResponse(new PaymentResponse(request.getOrderNumber(), payReference));
-            return response;
-        }
-
-        transactionDetails.responseCode = response.getResponseCode();
-        transactionDetails.responseTime = LocalDateTime.now();
-        transactionDetails.status = PaymentStatus.SUCCESSFUL;
-        transactionPersistor.updateTransaction(transactionDetails, response.getSuccessful());
+//        var transactionDetails = transactionPersistor.findTransaction(payReference);
+//        if(!response.getSuccessful()){
+//            transactionDetails.responseCode = response.getResponseCode();
+//            transactionDetails.responseTime = LocalDateTime.now();
+//            transactionDetails.status = PaymentStatus.FAILED;
+//            transactionPersistor.updateTransaction(transactionDetails, response.getSuccessful());
+//
+//            response.setResponseCode("99");
+//            response.setResponseDescription("Payment NOT successful");
+//            response.setPaymentResponse(new PaymentResponse(request.getOrderNumber(), payReference));
+//            return response;
+//        }
+//
+//        transactionDetails.responseCode = response.getResponseCode();
+//        transactionDetails.responseTime = LocalDateTime.now();
+//        transactionDetails.status = PaymentStatus.SUCCESSFUL;
+//        transactionPersistor.updateTransaction(transactionDetails, response.getSuccessful());
 
         response.setSuccessful(true);
         response.setResponseCode("00");
