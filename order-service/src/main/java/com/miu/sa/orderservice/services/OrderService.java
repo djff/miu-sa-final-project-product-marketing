@@ -99,11 +99,15 @@ public class OrderService {
                 "\n Payment Status: " + paymentMessage.responseDescription;
         createNotifyMessage(order, message);
 
+        System.out.println("************************ before shipping product ************");
         var orderProduct = new OrderProductMessage();
+        System.out.println("************************ before after1 roduct ************");
         orderProduct.orderId = order.getOrderId();
+        System.out.println("************************ before after2 product ************");
 //        if(paymentMessage.successful){
         // set products for shipment service
         orderProduct.productList = order.getProductList();
+        System.out.println("************************ before after3 product ************");
         kafkaOrderTemplate.send(ORDER_TOPIC, new Gson().toJson(orderProduct));
 
         System.out.println("Shipping called *****************");
