@@ -74,8 +74,8 @@ public class TransactionServiceTests {
 
     List<TransactionDto> getSampleTransactionData(){
         List<TransactionDto> trans = new ArrayList<>();
-        trans.add(new TransactionDto("1", "1", null, getSampleProduct().stream().limit(2).collect(Collectors.toList()), LocalDateTime.of(2021, Month.OCTOBER, 17, 00, 00), "PAID"));
-        trans.add(new TransactionDto("2", "2", null, getSampleProduct().stream().skip(2).collect(Collectors.toList()), LocalDateTime.of(2021, Month.OCTOBER, 18, 00, 00), "PAID"));
+        trans.add(new TransactionDto("1", "1", null, getSampleProduct().stream().limit(2).collect(Collectors.toList()), "2021-10-20T01:04:15.285", "PAID"));
+        trans.add(new TransactionDto("2", "2", null, getSampleProduct().stream().skip(2).collect(Collectors.toList()), "2021-10-21T01:04:15.285", "PAID"));
         return trans;
     }
 
