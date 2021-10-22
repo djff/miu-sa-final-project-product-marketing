@@ -21,8 +21,8 @@ public class OrderService {
     final private KafkaTemplate<String, String> kafkaNotifyTemplate;
     final private KafkaTemplate<String, String> kafkaProductTemplate;
     final private KafkaTemplate<String, String> kafkaAffiliateTemplate;
-    private final String ORDER_TOPIC = "order-topic";
-    private final String AFFILIATE_TOPIC = "affiliate-topic";
+    private final String ORDER_TOPIC = "order_topic";
+    private final String AFFILIATE_TOPIC = "AFFILIATE_COMPLETE_ORDER";
     private final String NOTIFICATION_TOPIC = "notification-topic";
     private final String PRODUCT_TOPIC = "product-topic";
 
@@ -85,7 +85,7 @@ public class OrderService {
         System.out.println("The kafka is working well." + testString);
     }
 
-    @KafkaListener(topics = "payment-response-topic", groupId = "group_id")
+    @KafkaListener(topics = "payment_response_topic", groupId = "group_id")
     public void setOrderAsPaid(String json){
         System.out.println("#######################");
         System.out.println(json);
