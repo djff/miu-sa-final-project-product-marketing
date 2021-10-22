@@ -93,6 +93,7 @@ public class CustomerService {
 
     @Cacheable(value = "customers")
     public ResponseModel findAll() {
+        log.info("findAll Request ");
         ResponseModel response = new ResponseModel();
         try {
             response.setMessage("Customer list fetched");
@@ -101,11 +102,13 @@ public class CustomerService {
                     a.getEmail(), a.getRole(), a.isActive(), a.getAddresses(), a.getPayments()))
                     .collect(Collectors.toList()));
         } catch (Exception e) {
+            log.error("findAll Exception => " + e.getMessage());
             e.printStackTrace();
             response.setMessage(e.getMessage());
             response.setSuccess(false);
-            response.setData(new JsonObject());
+            response.setData("");
         }
+        log.info("findAll Response ==> " + response);
         return response;
     }
 

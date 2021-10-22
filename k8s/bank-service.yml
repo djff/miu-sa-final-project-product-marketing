@@ -26,7 +26,10 @@ spec:
           - containerPort: 9494
         env:
           - name: EUREKA_URI
-            value: http://eureka-0.eureka.default.svc.cluster.local:8761/eureka
+            valueFrom:
+              configMapKeyRef:
+                name: app-config
+                key: eureka-uri
           - name: ZIPKIN_URL
             value: http://zipkin:9411/
 ---

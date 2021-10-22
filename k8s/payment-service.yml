@@ -26,14 +26,24 @@ spec:
           - name: EUREKA_URI
             valueFrom:
               configMapKeyRef:
-                name: eureka-uri
-                key: key
+                name: app-config
+                key: eureka-uri
           - name: S2S_LOCAL_TOKEN
             value: YXBpLXNlcnZpY2UtYWNjb3VudDpwd2QkMjAyMQ==
           - name: KAFKA_SERVER
             value: kafka-broker:9092
           - name: ZIPKIN_URL
             value: http://zipkin:9411/
+          - name: CARD_PAYMENT_URI
+            valueFrom:
+              configMapKeyRef:
+                name: app-config
+                key: card-service-uri
+          - name: BANK_PAYMENT_URI
+            valueFrom:
+              configMapKeyRef:
+                name: app-config
+                key: bank-service-uri
 ---
 
 apiVersion: v1

@@ -32,8 +32,8 @@ spec:
             - name: EUREKA_URI
               valueFrom:
                 configMapKeyRef:
-                  name: eureka-uri
-                  key: key
+                  name: app-config
+                  key: eureka-uri
 
 ---
 
