@@ -3,9 +3,13 @@
 
 name: Product Affiliate CI/CD Pipeline
 
+# on:
+#   pull_request:
+#     branches: [master]
 on:
-  pull_request:
-    branches: [master]
+  push:
+    branches:
+      - master
   workflow_dispatch:
 
 env:
@@ -35,11 +39,11 @@ jobs:
         # server-id: github # Value of the distributionManagement/repository/id field of the pom.xml
         # settings-path: ${{ github.workspace }} # location for the settings.xml file
 
-     - name: Build and Pushing registry service
-       run: mvn package -DskipTests dockerfile:push --file registry-service/pom.xml
-       env:
-           MAVEN_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-           MAVEN_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+    - name: Build and Pushing registry service
+      run: mvn package -DskipTests dockerfile:push --file registry-service/pom.xml
+      env:
+          MAVEN_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          MAVEN_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
 
     - name: Build and Pushing gateway service
       run: mvn package -DskipTests dockerfile:push --file gateway-service/pom.xml
@@ -47,17 +51,17 @@ jobs:
           MAVEN_USERNAME: ${{ secrets.DOCKER_USERNAME }}
           MAVEN_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
 
-     - name: Build and Pushing bank service
-       run: mvn package -DskipTests dockerfile:push --file BankService/pom.xml
-       env:
-           MAVEN_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-           MAVEN_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+    - name: Build and Pushing bank service
+      run: mvn package -DskipTests dockerfile:push --file BankService/pom.xml
+      env:
+          MAVEN_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          MAVEN_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
 
-     - name: Build and Pushing card service
-       run: mvn package -DskipTests dockerfile:push --file CardService/pom.xml
-       env:
-           MAVEN_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-           MAVEN_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+    - name: Build and Pushing card service
+      run: mvn package -DskipTests dockerfile:push --file CardService/pom.xml
+      env:
+          MAVEN_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          MAVEN_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
 
     - name: Build and Pushing account service
       run: mvn package -DskipTests dockerfile:push --file account-service/pom.xml
@@ -65,47 +69,47 @@ jobs:
           MAVEN_USERNAME: ${{ secrets.DOCKER_USERNAME }}
           MAVEN_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
 
-     - name: Build and Pushing affiliate service
-       run: mvn package -DskipTests dockerfile:push --file affiliate-service/pom.xml
-       env:
-           MAVEN_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-           MAVEN_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+    - name: Build and Pushing affiliate service
+      run: mvn package -DskipTests dockerfile:push --file affiliate-service/pom.xml
+      env:
+          MAVEN_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          MAVEN_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
 
-     - name: Build and Pushing auth service
-       run: mvn package -DskipTests dockerfile:push --file auth-service/pom.xml
-       env:
-           MAVEN_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-           MAVEN_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+    - name: Build and Pushing auth service
+      run: mvn package -DskipTests dockerfile:push --file auth-service/pom.xml
+      env:
+          MAVEN_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          MAVEN_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
 
-     - name: Build and Pushing notification service
-       run: mvn package -DskipTests dockerfile:push --file notification-service/pom.xml
-       env:
-           MAVEN_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-           MAVEN_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+    - name: Build and Pushing notification service
+      run: mvn package -DskipTests dockerfile:push --file notification-service/pom.xml
+      env:
+          MAVEN_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          MAVEN_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
 
-     - name: Build and Pushing order service
-       run: mvn package -DskipTests dockerfile:push --file order-service/pom.xml
-       env:
-           MAVEN_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-           MAVEN_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+    - name: Build and Pushing order service
+      run: mvn package -DskipTests dockerfile:push --file order-service/pom.xml
+      env:
+          MAVEN_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          MAVEN_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
 
-     - name: Build and Pushing payment service
-       run: mvn package -DskipTests dockerfile:push --file payment-service/pom.xml
-       env:
-           MAVEN_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-           MAVEN_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+    - name: Build and Pushing payment service
+      run: mvn package -DskipTests dockerfile:push --file payment-service/pom.xml
+      env:
+          MAVEN_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          MAVEN_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
 
-     - name: Build and Pushing Product service
-       run: mvn package -DskipTests dockerfile:push --file product-service/pom.xml
-       env:
-           MAVEN_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-           MAVEN_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+    - name: Build and Pushing Product service
+      run: mvn package -DskipTests dockerfile:push --file product-service/pom.xml
+      env:
+          MAVEN_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          MAVEN_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
     
-     - name: Build and Pushing shipping service
-       run: mvn package -DskipTests dockerfile:push --file shipping\ service/pom.xml
-       env:
-           MAVEN_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-           MAVEN_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+    - name: Build and Pushing shipping service
+      run: mvn package -DskipTests dockerfile:push --file shipping\ service/pom.xml
+      env:
+          MAVEN_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          MAVEN_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
 
   Deploy:
     needs: build
