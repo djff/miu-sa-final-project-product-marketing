@@ -1,5 +1,6 @@
 package miu.sa.accountservice.service;
 
+import com.google.gson.JsonObject;
 import lombok.extern.slf4j.Slf4j;
 import miu.sa.accountservice.exceptions.ResourceNotFoundException;
 import miu.sa.accountservice.model.AccountDto;
@@ -9,7 +10,9 @@ import miu.sa.accountservice.repository.AffiliateRepository;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @SuppressWarnings("Duplicates")
@@ -57,7 +60,8 @@ public class AffiliateService {
 
             response.setMessage("Affiliate created");
             response.setSuccess(true);
-            response.setData(new AccountDto(acct.getId(), acct.getEmail(), acct.getFirstName(), acct.getLastName(), acct.getRole(), acct.isActive(), acct.getAddresses(), acct.getPayments()));
+            response.setData(new AccountDto(acct.getId(), acct.getFirstName(), acct.getLastName(), acct.getEmail(),
+                    acct.getRole(), acct.isActive(), acct.getAddresses(), acct.getPayments()));
         } catch (Exception e) {
             log.error("save Exception => " + e.getMessage());
             e.printStackTrace();
@@ -75,7 +79,8 @@ public class AffiliateService {
         ResponseModel response = new ResponseModel();
         try {
             AccountDto dto = repository.findById(id)
-                    .map(a -> new AccountDto(a.getId(), a.getEmail(), a.getFirstName(), a.getLastName(), a.getRole(), a.isActive(), a.getAddresses(), a.getPayments()))
+                    .map(a -> new AccountDto(a.getId(), a.getFirstName(), a.getLastName(), a.getEmail(), a.getRole(),
+                            a.isActive(), a.getAddresses(), a.getPayments()))
                     .orElseThrow(() -> new ResourceNotFoundException("Affiliate not found for this id :: " + id));
             response.setMessage("Customer info fetched");
             response.setSuccess(true);
@@ -91,6 +96,23 @@ public class AffiliateService {
         return response;
     }
 
+    @Cacheable(value = "affiliates")
+    public ResponseModel findAll() {
+        ResponseModel response = new ResponseModel();
+        try {
+            response.setMessage("Affiliate list fetched");
+            response.setSuccess(true);
+            response.setData(repository.findAll().stream().map(a -> new AccountDto(a.getId(), a.getFirstName(), a.getLastName(),
+                    a.getEmail(), a.getRole(), a.isActive(), a.getAddresses(), a.getPayments()))
+                    .collect(Collectors.toList()));
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.setMessage(e.getMessage());
+            response.setSuccess(false);
+            response.setData(new JsonObject());
+        }
+        return response;
+    }
 
 //    public ResponseModel auth(Affiliate account){
 //        ResponseModel response = new ResponseModel();
@@ -107,12 +129,6 @@ public class AffiliateService {
 //            response.setData(new JsonObject());
 //        }
 //        return response;
-//    }
-//
-//    @Cacheable(value = "affiliates")
-//    public List<AccountDto> findAll() {
-//        return repository.findAll().stream().map(a -> new AccountDto(a.getId(), a.getEmail(), a.getFirstName(), a.getLastName(), a.getRole(), a.isActive(), a.getAddresses(), a.getPayments()))
-//                .collect(Collectors.toList());
 //    }
 //
 //    @CachePut(value = "affiliates", key = "id")

@@ -11,6 +11,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @SuppressWarnings("Duplicates")
@@ -90,6 +91,24 @@ public class CustomerService {
         return response;
     }
 
+    @Cacheable(value = "customers")
+    public ResponseModel findAll() {
+        ResponseModel response = new ResponseModel();
+        try {
+            response.setMessage("Customer list fetched");
+            response.setSuccess(true);
+            response.setData(repository.findAll().stream().map(a -> new AccountDto(a.getId(), a.getFirstName(), a.getLastName(),
+                    a.getEmail(), a.getRole(), a.isActive(), a.getAddresses(), a.getPayments()))
+                    .collect(Collectors.toList()));
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.setMessage(e.getMessage());
+            response.setSuccess(false);
+            response.setData(new JsonObject());
+        }
+        return response;
+    }
+
 //    public ResponseModel auth(Customer account) {
 //        ResponseModel response = new ResponseModel();
 //        boolean suc = repository.findByEmailAndPassword(account.getEmail(), account.getPassword())
@@ -102,22 +121,6 @@ public class CustomerService {
 //            response.setSuccess(false);
 //        }
 //        response.setData(new JsonObject());
-//        return response;
-//    }
-//    @Cacheable(value = "customers")
-//    public ResponseModel findAll() {
-//        ResponseModel response = new ResponseModel();
-//        try {
-//            response.setMessage("Customer list fetched");
-//            response.setSuccess(true);
-//            response.setData(repository.findAll().stream().map(a -> new AccountDto(a.getId(), a.getEmail(), a.getFirstName(), a.getLastName(), a.getRole(), a.isActive(), a.getAddresses(), a.getPayments()))
-//                    .collect(Collectors.toList()));
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            response.setMessage(e.getMessage());
-//            response.setSuccess(false);
-//            response.setData(new JsonObject());
-//        }
 //        return response;
 //    }
 
