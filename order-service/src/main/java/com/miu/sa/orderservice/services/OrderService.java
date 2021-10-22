@@ -21,8 +21,8 @@ public class OrderService {
     final private KafkaTemplate<String, String> kafkaNotifyTemplate;
     final private KafkaTemplate<String, String> kafkaProductTemplate;
     final private KafkaTemplate<String, String> kafkaAffiliateTemplate;
-    private final String ORDER_TOPIC = "order-topic";
-    private final String AFFILIATE_TOPIC = "affiliate-topic";
+    private final String ORDER_TOPIC = "order_topic";
+    private final String AFFILIATE_TOPIC = "AFFILIATE_COMPLETE_ORDER";
     private final String NOTIFICATION_TOPIC = "notification-topic";
     private final String PRODUCT_TOPIC = "product-topic";
 
