@@ -31,12 +31,12 @@ public class TransactionService {
 
     public BasicResponse makePayment(PaymentDTO request){
         BasicResponse response = new BasicResponse(false);
-        if(!request.IsValid(request)){
-            response.setResponseCode("99");
-            response.setResponseDescription("Parameters for payment type not valid");
-            response.setPaymentResponse(new PaymentResponse(request.getOrderNumber(), "Incomplete payment parameters"));
-            return response;
-        }
+//        if(!request.IsValid(request)){
+//            response.setResponseCode("99");
+//            response.setResponseDescription("Parameters for payment type not valid");
+//            response.setPaymentResponse(new PaymentResponse(request.getOrderNumber(), "Incomplete payment parameters"));
+//            return response;
+//        }
 
         var payReference = utils.GenerateReference();
         transactionPersistor.addTransaction(request, payReference);
@@ -66,23 +66,23 @@ public class TransactionService {
         }
 
         //TODO: update payment with response from transaction services
-        var transactionDetails = transactionPersistor.findTransaction(payReference);
-        if(!response.getSuccessful()){
-            transactionDetails.responseCode = response.getResponseCode();
-            transactionDetails.responseTime = LocalDateTime.now();
-            transactionDetails.status = PaymentStatus.FAILED;
-            transactionPersistor.updateTransaction(transactionDetails, response.getSuccessful());
-
-            response.setResponseCode("99");
-            response.setResponseDescription("Payment NOT successful");
-            response.setPaymentResponse(new PaymentResponse(request.getOrderNumber(), payReference));
-            return response;
-        }
-
-        transactionDetails.responseCode = response.getResponseCode();
-        transactionDetails.responseTime = LocalDateTime.now();
-        transactionDetails.status = PaymentStatus.SUCCESSFUL;
-        transactionPersistor.updateTransaction(transactionDetails, response.getSuccessful());
+//        var transactionDetails = transactionPersistor.findTransaction(payReference);
+//        if(!response.getSuccessful()){
+//            transactionDetails.responseCode = response.getResponseCode();
+//            transactionDetails.responseTime = LocalDateTime.now();
+//            transactionDetails.status = PaymentStatus.FAILED;
+//            transactionPersistor.updateTransaction(transactionDetails, response.getSuccessful());
+//
+//            response.setResponseCode("99");
+//            response.setResponseDescription("Payment NOT successful");
+//            response.setPaymentResponse(new PaymentResponse(request.getOrderNumber(), payReference));
+//            return response;
+//        }
+//
+//        transactionDetails.responseCode = response.getResponseCode();
+//        transactionDetails.responseTime = LocalDateTime.now();
+//        transactionDetails.status = PaymentStatus.SUCCESSFUL;
+//        transactionPersistor.updateTransaction(transactionDetails, response.getSuccessful());
 
         response.setSuccessful(true);
         response.setResponseCode("00");
