@@ -25,10 +25,10 @@ public class KafkaConsumer {
         HashMap<String, Object> response = gson.fromJson(message, HashMap.class);
         Boolean isPaid = (Boolean) response.get("isPaid");
         UUID orderId = (UUID) response.get("orderId");
-        if(isPaid) {
-            ResponseFormat responseShipped = myService.processResponse(orderId);
-            kafkaProducer.writeMessage(gson.toJson(responseShipped.getData()));
-        }
+//        if(isPaid) {
+        ResponseFormat responseShipped = myService.processResponse(orderId);
+        kafkaProducer.writeMessage(gson.toJson(responseShipped.getData()));
+//        }
 
         System.out.println(response.get("isPaid"));
 
