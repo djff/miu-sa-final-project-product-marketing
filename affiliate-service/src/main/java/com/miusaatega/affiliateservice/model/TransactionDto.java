@@ -15,6 +15,6 @@ public class TransactionDto {
     private String transRef;
     private Double amount;
     private List<Product> products;
-    private LocalDateTime transDate;
+    private String transDate;
     private String paymentStatus;
 }

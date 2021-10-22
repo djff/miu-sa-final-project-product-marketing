@@ -21,6 +21,6 @@ public class Transaction implements Serializable {
     private String transRef;
     private Double amount;
     private List<Product> products;
-    private LocalDateTime transDate;
+    private String transDate;
     private String paymentStatus;
 }

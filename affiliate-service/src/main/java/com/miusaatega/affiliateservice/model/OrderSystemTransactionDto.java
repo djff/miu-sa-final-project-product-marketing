@@ -14,6 +14,6 @@ public class OrderSystemTransactionDto {
     private String orderId;
     private Double amount;
     private List<Product> productList;
-    private LocalDateTime dateCreated;
+    private String dateCreated;
     private String paymentStatus;
 }
