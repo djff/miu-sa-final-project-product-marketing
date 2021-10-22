@@ -28,6 +28,9 @@ public class SpringCloudConfig {
                 .route("product-service", r -> r.path("/api/products/**")
                         .filters(f -> f.filter(filter))
                         .uri("lb://PRODUCT-SERVICE"))
+                .route("affiliates-service", r -> r.path("/api/affiliates/**")
+                        .filters(f -> f.filter(filter))
+                        .uri("lb://AFFILIATE-SERVICE"))
                 .build();
     }
 
