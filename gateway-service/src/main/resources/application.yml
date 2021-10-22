@@ -4,8 +4,9 @@ spring:
     gateway:
       globalcors:
         corsConfigurations:
-          '[/**]':
+          '[**]':
             allowedOrigins: "*"
+<<<<<<< HEAD
             allowedHeaders: "*"
             allowedMethods:
               - GET
@@ -13,3 +14,7 @@ spring:
               - OPTIONS
               - PUT
               - DELETE
+=======
+            allowedMethods: "*"
+            allowedHeaders: "*"
+>>>>>>> 54d91a19059099ec8ef8d9f535aa22421119cc0d
