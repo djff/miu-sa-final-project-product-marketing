@@ -106,6 +106,7 @@ public class OrderService {
         orderProduct.productList = order.getProductList();
         kafkaOrderTemplate.send(ORDER_TOPIC, new Gson().toJson(orderProduct));
 
+        System.out.println("Shipping called *****************");
         // set products for affiliate
         orderProduct.productList =
                 order.getProductList()
@@ -113,7 +114,7 @@ public class OrderService {
                         .filter(p -> p.getAffiliateId() != null)
                         .collect(Collectors.toList());
         kafkaAffiliateTemplate.send(AFFILIATE_TOPIC, new Gson().toJson(orderProduct));
-
+        System.out.println("Affiliate called *****************");
 //        }
     }
 
