@@ -45,11 +45,11 @@ jobs:
 #          MAVEN_USERNAME: ${{ secrets.DOCKER_USERNAME }}
 #          MAVEN_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
 #
-    - name: Build and Pushing gateway service
-      run: mvn package -DskipTests dockerfile:push --file gateway-service/pom.xml
-      env:
-          MAVEN_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-          MAVEN_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+#     - name: Build and Pushing gateway service
+#       run: mvn package -DskipTests dockerfile:push --file gateway-service/pom.xml
+#       env:
+#           MAVEN_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+#           MAVEN_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
 #
 #    - name: Build and Pushing bank service
 #      run: mvn package -DskipTests dockerfile:push --file BankService/pom.xml
@@ -87,17 +87,16 @@ jobs:
 #          MAVEN_USERNAME: ${{ secrets.DOCKER_USERNAME }}
 #          MAVEN_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
 #
-    - name: Build and Pushing order service
-      run: mvn package -DskipTests dockerfile:push --file order-service/pom.xml
+#     - name: Build and Pushing order service
+#       run: mvn package -DskipTests dockerfile:push --file order-service/pom.xml
+#       env:
+#           MAVEN_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+#           MAVEN_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+    - name: Build and Pushing payment service
+      run: mvn package -DskipTests dockerfile:push --file payment-service/pom.xml
       env:
-          MAVEN_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-          MAVEN_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-
-#    - name: Build and Pushing payment service
-#      run: mvn package -DskipTests dockerfile:push --file payment-service/pom.xml
-#      env:
-#          MAVEN_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-#          MAVEN_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+           MAVEN_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+           MAVEN_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
 #
 #    - name: Build and Pushing Product service
 #      run: mvn package -DskipTests dockerfile:push --file product-service/pom.xml
@@ -124,5 +123,5 @@ jobs:
         CLUSTER_NAME: ${{ env.GKE_CLUSTER }}
         ZONE_NAME: ${{ env.GKE_ZONE }}
       with:
-        args: apply -f k8s/
+        args: apply -f k8s/payment-service.yml
 
