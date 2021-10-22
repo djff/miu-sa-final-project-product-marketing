@@ -38,10 +38,10 @@ spec:
           - name: S2S_LOCAL_TOKEN
             value: YXBpLXNlcnZpY2UtYWNjb3VudDpwd2QkMjAyMQ==
           - name: EUREKA_URI
-            valueFrom: 
+            valueFrom:
               configMapKeyRef:
-                name: eureka-uri
-                key: key
+                name: app-config
+                key: eureka-uri
 
 ---
 

@@ -30,8 +30,13 @@ spec:
             - name: EUREKA_URI
               valueFrom:
                 configMapKeyRef:
-                  name: eureka-uri
-                  key: key
+                  name: app-config
+                  key: eureka-uri
+            - name: S2S_TOKEN_ACCOUNT
+              valueFrom:
+                secretKeyRef:
+                  name: app-secrets
+                  key: s2s_account_service
 
 ---
 

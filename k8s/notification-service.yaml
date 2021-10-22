@@ -28,8 +28,23 @@ spec:
             - name: EUREKA_URI
               valueFrom: 
                 configMapKeyRef:
-                  name: eureka-uri
-                  key: key
+                  name: app-config
+                  key: eureka-uri
+            - name: GMAIL_USER_EMAIL
+              valueFrom:
+                configMapKeyRef:
+                  name: app-config
+                  key: gmail-user
+            - name: GMAIL_SENDER
+              valueFrom:
+                configMapKeyRef:
+                  name: app-config
+                  key: gmail-sender
+            - name: GMAIL_USER_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: app-secrets
+                  key: gmail_password
 
 ---
 

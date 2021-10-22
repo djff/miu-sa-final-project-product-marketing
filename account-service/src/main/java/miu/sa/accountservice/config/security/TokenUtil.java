@@ -10,7 +10,7 @@ public class TokenUtil {
     private Environment env;
 
     public Boolean validateToken(String token) {
-        final String secret = env.getProperty("S2S_ACCOUNT_SERVICE", "YXBpLXNlcnZpY2UtYWNjb3VudDpwd2QkMjAyMQ==");
-        return secret.equals(token);
+        final String secret = env.getProperty("S2S_ACCOUNT_SERVICE");
+        return secret != null ? secret.equals(token) : false;
     }
 }

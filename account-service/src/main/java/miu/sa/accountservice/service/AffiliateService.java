@@ -98,6 +98,7 @@ public class AffiliateService {
 
     @Cacheable(value = "affiliates")
     public ResponseModel findAll() {
+        log.info("findAll Request ");
         ResponseModel response = new ResponseModel();
         try {
             response.setMessage("Affiliate list fetched");
@@ -106,11 +107,13 @@ public class AffiliateService {
                     a.getEmail(), a.getRole(), a.isActive(), a.getAddresses(), a.getPayments()))
                     .collect(Collectors.toList()));
         } catch (Exception e) {
+            log.error("findAll Exception => " + e.getMessage());
             e.printStackTrace();
             response.setMessage(e.getMessage());
             response.setSuccess(false);
-            response.setData(new JsonObject());
+            response.setData("");
         }
+        log.info("findAll Response ==> " + response);
         return response;
     }
 
