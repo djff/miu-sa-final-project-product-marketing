@@ -104,11 +104,11 @@ jobs:
 #          MAVEN_USERNAME: ${{ secrets.DOCKER_USERNAME }}
 #          MAVEN_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
 #
-    - name: Build and Pushing shipping service
-      run: mvn package -DskipTests dockerfile:push --file shipping\ service/pom.xml
-      env:
-         MAVEN_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-         MAVEN_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+#     - name: Build and Pushing shipping service
+#       run: mvn package -DskipTests dockerfile:push --file shipping\ service/pom.xml
+#       env:
+#          MAVEN_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+#          MAVEN_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
 
   Deploy:
     needs: build
