@@ -1,4 +1,4 @@
-# miu-sa-final-project-product-marketing
+# miu-sa-final-project: Affiliate Product Marketing
 Software Architecture course final project
 
 ### Project Members
