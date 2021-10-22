@@ -10,6 +10,5 @@ import java.util.UUID;
 
 @Repository
 public interface AffiliateRepository extends MongoRepository<Affiliate, UUID> {
-    Optional<Affiliate> findByEmailAndPassword(String email, String password);
     Optional<Affiliate> findByEmail(String email);
 }

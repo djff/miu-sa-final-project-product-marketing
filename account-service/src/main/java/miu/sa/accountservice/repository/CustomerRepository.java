@@ -9,6 +9,5 @@ import java.util.UUID;
 
 @Repository
 public interface CustomerRepository extends MongoRepository<Customer, UUID> {
-    Optional<Customer> findByEmailAndPassword(String email, String password);
     Optional<Customer> findByEmail(String email);
 }

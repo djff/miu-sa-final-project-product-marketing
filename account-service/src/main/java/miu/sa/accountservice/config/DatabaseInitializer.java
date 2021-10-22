@@ -94,7 +94,7 @@ public class DatabaseInitializer implements ApplicationListener<ApplicationReady
         custAccounts.forEach(service::save);
         affAccounts.forEach(affService::save);
         log.info("Database preloaded::::");
-        System.out.println("Customers:: " + repository.findAll());
-        System.out.println("Affiliates:: " + affRepo.findAll());
+        System.out.println("Customers:: " + service.findAll());
+        System.out.println("Affiliates:: " + affService.findAll());
     }
 }
