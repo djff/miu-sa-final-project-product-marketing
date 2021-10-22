@@ -85,7 +85,7 @@ public class OrderService {
         System.out.println("The kafka is working well." + testString);
     }
 
-    @KafkaListener(topics = "payment-response-topic", groupId = "group_id")
+    @KafkaListener(topics = "payment_response_topic", groupId = "group_id")
     public void setOrderAsPaid(String json){
         System.out.println("#######################");
         System.out.println(json);
