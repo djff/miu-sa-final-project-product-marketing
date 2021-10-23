@@ -58,40 +58,40 @@ jobs:
         credentials: ${{ secrets.GKE_SA_KEY }}
 
     
-    # Build the Maven service
-    - name: Build Account Service
-      run: mvn package -DskipTests --file account-service/pom.xml
+#     # Build the Maven service
+#     - name: Build Account Service
+#       run: mvn package -DskipTests --file account-service/pom.xml
       
-    - name: Build Account Service
-      run: mvn package -DskipTests --file product-service/pom.xml
+#     - name: Build Account Service
+#       run: mvn package -DskipTests --file product-service/pom.xml
     
-#     # Build the Docker image
-#     - name: Build Account Service Container
-#       run: |-
-#         docker build -f "account-service/Dockerfile" \
-#           --tag "gcr.io/$PROJECT_ID/$ACCOUNT_SERVICE_NAME:$GITHUB_SHA" \
-#           --build-arg GITHUB_SHA="$GITHUB_SHA" \
-#           --build-arg GITHUB_REF="$GITHUB_REF" \
-#           .
+    # Build the Docker image
+    - name: Build Account Service Container
+      run: |-
+        docker build -f "account-service/Dockerfile" \
+          --tag "gcr.io/$PROJECT_ID/$ACCOUNT_SERVICE_NAME:$GITHUB_SHA" \
+          --build-arg GITHUB_SHA="$GITHUB_SHA" \
+          --build-arg GITHUB_REF="$GITHUB_REF" \
+          .
           
-#     - name: Build Product Service
-#       run: |-
-#         docker build -f "product-service/Dockerfile" \
-#           --tag "gcr.io/$PROJECT_ID/$PRODUCT_SERVICE_NAME:$GITHUB_SHA" \
-#           --build-arg GITHUB_SHA="$GITHUB_SHA" \
-#           --build-arg GITHUB_REF="$GITHUB_REF" \
-#           .
+    - name: Build Product Service
+      run: |-
+        docker build -f "product-service/Dockerfile" \
+          --tag "gcr.io/$PROJECT_ID/$PRODUCT_SERVICE_NAME:$GITHUB_SHA" \
+          --build-arg GITHUB_SHA="$GITHUB_SHA" \
+          --build-arg GITHUB_REF="$GITHUB_REF" \
+          .
 
     # Push the Docker image to Google Container Registry
     - name: Publish Account Service
       run: |-
-        docker push "djff94/final-account-service:0.0.1-SNAPSHOT"
-#         docker push "gcr.io/$PROJECT_ID/$ACCOUNT_SERVICE_NAME:$GITHUB_SHA"
+        docker push "gcr.io/$PROJECT_ID/$ACCOUNT_SERVICE_NAME:$GITHUB_SHA"
+#         docker push "djff94/final-account-service:0.0.1-SNAPSHOT"
         
     - name: Publish Product Service
       run: |-
-        docker push "djff94/final-product-service:0.0.1-SNAPSHOT"
-#         docker push "gcr.io/$PROJECT_ID/$PRODUCT_SERVICE_NAME:$GITHUB_SHA"
+        docker push "gcr.io/$PROJECT_ID/$PRODUCT_SERVICE_NAME:$GITHUB_SHA"
+#         docker push "djff94/final-product-service:0.0.1-SNAPSHOT"
 
     # Set up kustomize
     - name: Set up Kustomize
